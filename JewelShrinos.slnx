@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="JewelShrinos.API/JewelShrinos.API.csproj" />
+  <Project Path="JewelShrinos.Application/JewelShrinos.Application.csproj" />
+  <Project Path="JewelShrinos.Core/JewelShrinos.Core.csproj" />
+  <Project Path="JewelShrinos.Infrastructure/JewelShrinos.Infrastructure.csproj" />
+</Solution>
