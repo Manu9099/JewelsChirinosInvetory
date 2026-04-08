@@ -1,0 +1,16 @@
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Infrastructure.deps.json
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Infrastructure.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Infrastructure.pdb
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Core.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Core.pdb
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.AssemblyInfo.cs
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.sourcelink.json
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShr.C60B7281.Up2Date
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\refint\JewelShrinos.Infrastructure.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.pdb
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\ref\JewelShrinos.Infrastructure.dll
