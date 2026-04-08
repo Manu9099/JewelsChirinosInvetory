@@ -1,4 +1,4 @@
-namespace JewelShrinos.Application.DTOs.Request.Sale;
+
 public class SaleDetailRequest
 {
     public int ProductId { get; set; }

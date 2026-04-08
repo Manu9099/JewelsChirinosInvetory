@@ -1,8 +1,6 @@
 using JewelShrinos.Core.Entities;
 using System.Linq.Expressions;  
 
-namespace JewelShrinos.Core.Interfaces
-{
 
         public class GoogleTokenValidationResult
     {
@@ -53,50 +51,11 @@ namespace JewelShrinos.Core.Interfaces
         public List<SaleDetail> SaleDetails { get; set; } = new();
         public decimal TotalAmount { get; set; }
     }
-    /// <summary>
-    /// Proveedor de tokens JWT
-    /// </summary>
-        public class LoginResponse
-    {
-        public bool Success { get; set; }
-        public string? Message { get; set; }
-        public string? AccessToken { get; set; }
-        public string? RefreshToken { get; set; }
-        public UserResponse? User { get; set; }
-    }
+  
  
-    public class UserResponse
-    {
-        public int UserId { get; set; }
-        public string Username { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string FullName { get; set; } = null!;
-        public string Role { get; set; } = null!;
-    }
+
  
-    public class InvoiceResponse
-    {
-        public bool Success { get; set; }
-        public string? InvoiceNumber { get; set; }
-        public string? TicketNumber { get; set; }
-        public string? InvoiceUrl { get; set; }
-        public string? Message { get; set; }
-    }
- 
-    public class InvoiceStatusResponse
-    {
-        public string Status { get; set; } = null!; // ACEPTADA, RECHAZADA, PROCESANDO
-        public string? InvoiceNumber { get; set; }
-        public string? ErrorMessage { get; set; }
-    }
- 
-    public class SunatIntegrationResponse
-    {
-        public string RucNumber { get; set; } = null!;
-        public string? ApiProvider { get; set; }
-        public bool Status { get; set; }
-        public DateTime? LastSync { get; set; }
-    }
+  
  
     public class ApiResponse<T>
     {
@@ -139,22 +98,7 @@ namespace JewelShrinos.Core.Interfaces
         Task<GetTicketResponse> GetTicketAsync(string ticketNumber);
         Task<bool> IsConfiguredAsync();
     }
-   public class LoginRequest
-    {
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-    }
- 
-    public class GoogleLoginRequest
-    {
-        public string IdToken { get; set; } = null!;
-    }
- 
-    public class ChangePasswordRequest
-    {
-        public string CurrentPassword { get; set; } = null!;
-        public string NewPassword { get; set; } = null!;
-    }
+
       public interface IAuthenticationService
     {
         Task<LoginResponse> LoginAsync(LoginRequest request);
@@ -164,4 +108,3 @@ namespace JewelShrinos.Core.Interfaces
         Task<bool> ChangePasswordAsync(int userId, ChangePasswordRequest request);
     }
 
-}

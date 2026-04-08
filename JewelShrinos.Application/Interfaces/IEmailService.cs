@@ -1,8 +1,6 @@
  using JewelShrinos.Core.Entities;
 using System.Linq.Expressions;
 
-namespace JewelShrinos.Core.Interfaces
-{
    /// <summary>
     /// Servicio de Email
     /// </summary>
@@ -24,4 +22,3 @@ namespace JewelShrinos.Core.Interfaces
         Task<string> SaveQrCodeAsync(string data, string fileName);
         Task<string> SaveBarcodeAsync(string code, string fileName);
     }
-}
