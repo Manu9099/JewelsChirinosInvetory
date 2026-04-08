@@ -1,14 +1,6 @@
 using JewelShrinos.Core.Entities;
 using System.Linq.Expressions;
 using JewelShrinos.Application.DTOs.Request.Product;
-
-namespace JewelShrinos.Core.Interfaces
-{
-    /// <summary>
-    /// Servicio de Productos
-    /// </summary>
-   
-
     
     public interface IProductService
     {
@@ -24,4 +16,4 @@ namespace JewelShrinos.Core.Interfaces
         Task<ProductResponse> UpdateAsync(int id, UpdateProductRequest request);
         Task<bool> DeleteAsync(int id);
     }
-}
+
