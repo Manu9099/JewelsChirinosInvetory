@@ -1,4 +1,5 @@
-  namespace JewelShrinos.Application.DTOs.Request.Purchase;
+namespace JewelShrinos.Application.DTOs.Request.Purchase;
+
 public class PurchaseDetailRequest
 {
     public int ProductId { get; set; }

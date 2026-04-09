@@ -8,7 +8,7 @@ namespace JewelShrinos.Core.Entities
     public class Inventory
     {
         public int InventoryId { get; set; }
-        public int ProductId { get; set; }
+        
         
         public int AvailableStock { get; set; } = 0; // Listo para vender
         public int ReservedStock { get; set; } = 0; // Reservado por clientes
@@ -26,7 +26,9 @@ namespace JewelShrinos.Core.Entities
         public int TotalExit => SoldStock + DamagedStock;
  
         // Relaciones
-        public virtual Product? Product { get; set; }
+        public virtual Product? Product { get; set; }=null;
+          public int ProductId { get; set; }
+    
      public ICollection<InventoryMovement> InventoryMovements { get; set; } = new List<InventoryMovement>();
     }
 }

@@ -1,5 +1,5 @@
-  namespace JewelShrinos.Application.DTOs.Request.Purchase;
- 
+namespace JewelShrinos.Application.DTOs.Request.Purchase;
+
 public class CreatePurchaseRequest
 {
     public int SupplierId { get; set; }

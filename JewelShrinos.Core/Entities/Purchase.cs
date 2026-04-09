@@ -4,7 +4,7 @@ namespace JewelShrinos.Core.Entities
     {
         public int PurchaseId { get; set; }
         public string PurchaseNumber { get; set; } = null!; // C-YYYYMMDD-NNN
-        public int SupplierId { get; set; }
+       
         
         public DateTime PurchaseDate { get; set; }
         public DateTime? DeliveryDate { get; set; }
@@ -19,7 +19,11 @@ namespace JewelShrinos.Core.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
  
         // Relaciones
-        public virtual Supplier? Supplier { get; set; }
-        public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
-    }
+     
+
+        public int SupplierId { get; set; }
+        public Supplier Supplier { get; set; } = null!;
+
+        public ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
+            }
 }

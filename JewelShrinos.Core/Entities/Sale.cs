@@ -36,6 +36,7 @@ namespace JewelShrinos.Core.Entities
  
         // Relaciones
         public virtual Customer? Customer { get; set; }
+        public Product Product { get; set; } = null!;
         public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
         public virtual ICollection<Return> Returns { get; set; } = new List<Return>();
     }

@@ -32,6 +32,8 @@ namespace JewelShrinos.Core.Entities
         public virtual ICollection<InventoryMovement> InventoryMovements { get; set; } = new List<InventoryMovement>();
         public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
         public virtual ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
+       
+      
 
     }
 }

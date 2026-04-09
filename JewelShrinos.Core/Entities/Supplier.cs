@@ -14,7 +14,9 @@ namespace JewelShrinos.Core.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
  
         // Relaciones
-        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-        public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+   
+
+        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
     }
 }

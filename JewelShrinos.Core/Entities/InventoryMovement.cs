@@ -7,11 +7,16 @@ public class InventoryMovement
     public int ProductId { get; set; }
     public Product Product { get; set; } = null!;
 
-    public int InventoryId { get; set; }
-    public Inventory Inventory { get; set; } = null!;
-
     public string MovementType { get; set; } = null!;
     public int Quantity { get; set; }
-    public string? Reason { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public int? StockBefore { get; set; }
+    public int? StockAfter { get; set; }
+
+    public string? ReferenceType { get; set; }
+    public int? ReferenceId { get; set; }
+    public int? UserId { get; set; }
+
+    public string? Observations { get; set; }
+    public DateTime MovementDate { get; set; } = DateTime.UtcNow;
 }
