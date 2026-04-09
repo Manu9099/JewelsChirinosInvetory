@@ -27,5 +27,6 @@ namespace JewelShrinos.Core.Entities
  
         // Relaciones
         public virtual Product? Product { get; set; }
+     public ICollection<InventoryMovement> InventoryMovements { get; set; } = new List<InventoryMovement>();
     }
 }

@@ -1,28 +1,17 @@
-namespace JewelShrinos.Core.Entities
+namespace JewelShrinos.Core.Entities;
+
+public class InventoryMovement
 {
-    /// <summary>
-    /// Auditoría completa de movimientos
-    /// Cada cambio en inventario crea un registro aquí
-    /// </summary>
-    public class InventoryMovement
-    {
-        public long MovementId { get; set; }
-        public int ProductId { get; set; }
-        
-        public string MovementType { get; set; } = null!; // ENTRY, SALE, ADJUSTMENT, DAMAGED, RESERVE, RETURN
-        public int Quantity { get; set; }
-        public int? StockBefore { get; set; }
-        public int? StockAfter { get; set; }
- 
-        public string? ReferenceType { get; set; } // PURCHASE, SALE, MANUAL
-        public int? ReferenceId { get; set; } // ID de Compra/Venta
-        
-        public int? UserId { get; set; }
-        public string? Observations { get; set; }
-        public DateTime MovementDate { get; set; } = DateTime.UtcNow;
- 
-        // Relaciones
-        public virtual Product? Product { get; set; }
-        public virtual User? User { get; set; }
-    }
+    public int InventoryMovementId { get; set; }
+
+    public int ProductId { get; set; }
+    public Product Product { get; set; } = null!;
+
+    public int InventoryId { get; set; }
+    public Inventory Inventory { get; set; } = null!;
+
+    public string MovementType { get; set; } = null!;
+    public int Quantity { get; set; }
+    public string? Reason { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
