@@ -22,14 +22,6 @@ public class AppDbContext : DbContext
     public DbSet<Customer> Customers => Set<Customer>();
 
 
-    // Descomenta estos si YA tienes estas clases en Core
-    // public DbSet<Customer> Customers => Set<Customer>();
-    // public DbSet<Return> Returns => Set<Return>();
-    // public DbSet<ReturnDetail> ReturnDetails => Set<ReturnDetail>();
-    // public DbSet<User> Users => Set<User>();
-    // public DbSet<SunatIntegration> SunatIntegrations => Set<SunatIntegration>();
-    // public DbSet<Configuration> Configurations => Set<Configuration>();
-    // public DbSet<Audit> AuditLogs => Set<Audit>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -271,6 +263,11 @@ modelBuilder.Entity<Inventory>(entity =>
             entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
 
             entity.HasIndex(x => x.SaleNumber).IsUnique();
+
+            entity.HasOne(x => x.Customer)
+            .WithMany(c => c.Sales)
+            .HasForeignKey(x => x.CustomerId)
+            .OnDelete(DeleteBehavior.SetNull);
             
         });
 
@@ -302,6 +299,9 @@ modelBuilder.Entity<SaleDetail>(entity =>
         .HasConstraintName("fk_sale_details_products")
         .OnDelete(DeleteBehavior.Restrict);
 });
+
+
+
 modelBuilder.Entity<Customer>(entity =>
 {
     entity.ToTable("customers");
@@ -323,7 +323,6 @@ modelBuilder.Entity<Customer>(entity =>
     entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
 
     entity.HasIndex(x => x.Email).IsUnique().HasDatabaseName("ux_customers_email");
-    entity.HasIndex(x => x.GoogleId).IsUnique().HasDatabaseName("ux_customers_google_id");
 
     entity.HasMany(x => x.Sales)
         .WithOne(s => s.Customer)
@@ -331,49 +330,6 @@ modelBuilder.Entity<Customer>(entity =>
         .OnDelete(DeleteBehavior.SetNull);
 });
 
-        // ---- OPCIONALES: solo si esas clases ya existen ----
-
-        // modelBuilder.Entity<Customer>(entity =>
-        // {
-        //     entity.ToTable("customers");
-        //     entity.HasKey(x => x.CustomerId);
-        // });
-
-        // modelBuilder.Entity<Return>(entity =>
-        // {
-        //     entity.ToTable("returns");
-        //     entity.HasKey(x => x.ReturnId);
-        // });
-
-        // modelBuilder.Entity<ReturnDetail>(entity =>
-        // {
-        //     entity.ToTable("return_details");
-        //     entity.HasKey(x => x.ReturnDetailId);
-        // });
-
-        // modelBuilder.Entity<User>(entity =>
-        // {
-        //     entity.ToTable("users");
-        //     entity.HasKey(x => x.UserId);
-        // });
-
-        // modelBuilder.Entity<SunatIntegration>(entity =>
-        // {
-        //     entity.ToTable("sunat_integration");
-        //     entity.HasKey(x => x.SunatId);
-        // });
-
-        // modelBuilder.Entity<Configuration>(entity =>
-        // {
-        //     entity.ToTable("configuration");
-        //     entity.HasKey(x => x.ConfigId);
-        // });
-
-        // modelBuilder.Entity<Audit>(entity =>
-        // {
-        //     entity.ToTable("audit");
-        //     entity.HasKey(x => x.AuditId);
-        // });
     }
 }
 
