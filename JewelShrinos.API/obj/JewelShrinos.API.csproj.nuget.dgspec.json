@@ -1192,6 +1192,9 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
+              "C:\\Users\\manuc\\OneDrive\\Desktop\\JewelsChirinosInventory\\JewelShrinos.Application\\JewelShrinos.Application.csproj": {
+                "projectPath": "C:\\Users\\manuc\\OneDrive\\Desktop\\JewelsChirinosInventory\\JewelShrinos.Application\\JewelShrinos.Application.csproj"
+              },
               "C:\\Users\\manuc\\OneDrive\\Desktop\\JewelsChirinosInventory\\JewelShrinos.Core\\JewelShrinos.Core.csproj": {
                 "projectPath": "C:\\Users\\manuc\\OneDrive\\Desktop\\JewelsChirinosInventory\\JewelShrinos.Core\\JewelShrinos.Core.csproj"
               }
@@ -1213,6 +1216,22 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[10.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.4, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[10.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

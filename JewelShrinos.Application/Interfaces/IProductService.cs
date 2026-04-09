@@ -1,4 +1,3 @@
-// JewelShrinos.Application/Interfaces/IProductService.cs
 using JewelShrinos.Application.DTOs.Request.Product;
 using JewelShrinos.Application.DTOs.Response.Product;
 

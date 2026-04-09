@@ -14,3 +14,7 @@ C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastruct
 C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\refint\JewelShrinos.Infrastructure.dll
 C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.pdb
 C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\ref\JewelShrinos.Infrastructure.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Infrastructure.runtimeconfig.json
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Application.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\bin\Debug\net10.0\JewelShrinos.Application.pdb
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.Infrastructure\obj\Debug\net10.0\JewelShrinos.Infrastructure.genruntimeconfig.cache
