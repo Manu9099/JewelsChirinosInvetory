@@ -1,3 +1,4 @@
+   namespace JewelShrinos.Application.DTOs.Response.Purchase;
    public class PurchaseDetailResponse
     {
         public int PurchaseDetailId { get; set; }

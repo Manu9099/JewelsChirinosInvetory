@@ -1,4 +1,4 @@
-
+  namespace JewelShrinos.Application.DTOs.Request.Purchase;
  
 public class CreatePurchaseRequest
 {

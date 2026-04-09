@@ -1,3 +1,4 @@
+namespace JewelShrinos.Application.DTOs.Response.Auth;
   public class UserResponse
     {
         public int UserId { get; set; }

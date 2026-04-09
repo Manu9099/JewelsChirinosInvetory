@@ -1,5 +1,5 @@
 
-
+  namespace JewelShrinos.Application.DTOs.Request.Purchase;
  public class ReceivePurchaseRequest
 {
     public List<ReceiveDetailRequest> Details { get; set; } = new();

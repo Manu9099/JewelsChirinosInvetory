@@ -1,3 +1,4 @@
+namespace JewelShrinos.Application.DTOs.Response.Customer;
     public class CustomerResponse
     {
         public int CustomerId { get; set; }

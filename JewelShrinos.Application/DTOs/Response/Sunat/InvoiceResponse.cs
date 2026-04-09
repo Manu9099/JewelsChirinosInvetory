@@ -1,3 +1,4 @@
+   namespace JewelShrinos.Application.DTOs.Response.Sunat;
    public class InvoiceResponse
     {
         public bool Success { get; set; }

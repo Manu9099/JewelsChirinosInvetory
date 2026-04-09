@@ -1,3 +1,5 @@
+     namespace JewelShrinos.Application.DTOs.Request.Auth;
+     
    public class LoginRequest
     {
         public string Email { get; set; } = null!;

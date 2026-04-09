@@ -1,3 +1,5 @@
+  namespace JewelShrinos.Application.DTOs.Request.Return
+  {
   public class CreateReturnRequest
     {
         public int SaleId { get; set; }
@@ -7,3 +9,4 @@
         public string? Observations { get; set; }
         public string? CreatedBy { get; set; }
     }
+  }

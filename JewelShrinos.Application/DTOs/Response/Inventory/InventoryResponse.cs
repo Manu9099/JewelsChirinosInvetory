@@ -1,3 +1,4 @@
+  namespace JewelShrinos.Application.DTOs.Response.Inventory;
   public class InventoryResponse
     {
         public int InventoryId { get; set; }

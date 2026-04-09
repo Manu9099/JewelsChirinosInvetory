@@ -1,3 +1,4 @@
+namespace JewelShrinos.Application.DTOs.Request.Product;
 public class UpdateProductRequest
 {
     public string? Name { get; set; }

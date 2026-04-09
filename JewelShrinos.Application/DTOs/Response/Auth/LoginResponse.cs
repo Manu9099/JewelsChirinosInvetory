@@ -1,4 +1,4 @@
-
+namespace JewelShrinos.Application.DTOs.Response.Auth;
         public class LoginResponse
     {
         public bool Success { get; set; }

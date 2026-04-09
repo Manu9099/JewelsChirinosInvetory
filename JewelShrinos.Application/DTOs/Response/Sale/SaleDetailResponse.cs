@@ -1,3 +1,4 @@
+namespace JewelShrinos.Application.DTOs.Response.Sale;
           public class SaleDetailResponse
     {
         public int SaleDetailId { get; set; }

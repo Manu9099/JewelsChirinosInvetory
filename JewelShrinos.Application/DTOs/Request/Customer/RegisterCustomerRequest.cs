@@ -1,3 +1,4 @@
+  namespace JewelShrinos.Application.DTOs.Request.Customer;
        public class RegisterCustomerRequest
     {
         public string FirstName { get; set; } = null!;

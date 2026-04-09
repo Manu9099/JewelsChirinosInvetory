@@ -1,3 +1,4 @@
+    namespace JewelShrinos.Application.DTOs.Response.Inventory;
      public class InventoryMovementResponse
     {
         public long MovementId { get; set; }
