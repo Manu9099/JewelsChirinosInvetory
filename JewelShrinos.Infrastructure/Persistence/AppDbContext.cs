@@ -19,6 +19,9 @@ public class AppDbContext : DbContext
     public DbSet<Sale> Sales => Set<Sale>();
     public DbSet<SaleDetail> SaleDetails => Set<SaleDetail>();
 
+    public DbSet<Customer> Customers => Set<Customer>();
+
+
     // Descomenta estos si YA tienes estas clases en Core
     // public DbSet<Customer> Customers => Set<Customer>();
     // public DbSet<Return> Returns => Set<Return>();
@@ -271,33 +274,62 @@ modelBuilder.Entity<Inventory>(entity =>
             
         });
 
-        modelBuilder.Entity<SaleDetail>(entity =>
-        {
-            entity.ToTable("sale_details");
-            entity.HasKey(x => x.SaleDetailId);
+        
+modelBuilder.Entity<SaleDetail>(entity =>
+{
+    entity.ToTable("sale_details");
+    entity.HasKey(x => x.SaleDetailId);
 
-            entity.Property(x => x.SaleDetailId).HasColumnName("sale_detail_id");
-            entity.Property(x => x.SaleId).HasColumnName("sale_id");
-            entity.Property(x => x.ProductId).HasColumnName("product_id");
-            entity.Property(x => x.Quantity).HasColumnName("quantity");
-            entity.Property(x => x.UnitPrice).HasColumnName("unit_price").HasColumnType("numeric(12,2)");
-            entity.Property(x => x.Subtotal).HasColumnName("subtotal").HasColumnType("numeric(12,2)");
-            entity.Property(x => x.LineDiscount).HasColumnName("line_discount").HasColumnType("numeric(12,2)");
-            entity.Property(x => x.DetailStatus).HasColumnName("detail_status").HasMaxLength(50);
-            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+    entity.Property(x => x.SaleDetailId).HasColumnName("sale_detail_id");
+    entity.Property(x => x.SaleId).HasColumnName("sale_id");
+    entity.Property(x => x.ProductId).HasColumnName("product_id");
+    entity.Property(x => x.Quantity).HasColumnName("quantity");
+    entity.Property(x => x.UnitPrice).HasColumnName("unit_price").HasColumnType("numeric(12,2)");
+    entity.Property(x => x.Subtotal).HasColumnName("subtotal").HasColumnType("numeric(12,2)");
+    entity.Property(x => x.LineDiscount).HasColumnName("line_discount").HasColumnType("numeric(12,2)");
+    entity.Property(x => x.DetailStatus).HasColumnName("detail_status").HasMaxLength(50);
+    entity.Property(x => x.CreatedAt).HasColumnName("created_at");
 
-            entity.HasOne(x => x.Sale)
-                .WithMany(s => s.SaleDetails)
-                .HasForeignKey(x => x.SaleId)
-                .HasConstraintName("fk_sale_details_sales")
-                .OnDelete(DeleteBehavior.Cascade);
+    entity.HasOne(x => x.Sale)
+        .WithMany(s => s.SaleDetails)
+        .HasForeignKey(x => x.SaleId)
+        .HasConstraintName("fk_sale_details_sales")
+        .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(x => x.Product)
-                .WithMany()
-                .HasForeignKey(x => x.ProductId)
-                .HasConstraintName("fk_sale_details_products")
-                .OnDelete(DeleteBehavior.Restrict);
-        });
+    entity.HasOne(x => x.Product)
+        .WithMany(p => p.SaleDetails)
+        .HasForeignKey(x => x.ProductId)
+        .HasConstraintName("fk_sale_details_products")
+        .OnDelete(DeleteBehavior.Restrict);
+});
+modelBuilder.Entity<Customer>(entity =>
+{
+    entity.ToTable("customers");
+    entity.HasKey(x => x.CustomerId);
+
+    entity.Property(x => x.CustomerId).HasColumnName("customer_id");
+    entity.Property(x => x.FirstName).HasColumnName("first_name").HasMaxLength(100).IsRequired();
+    entity.Property(x => x.LastName).HasColumnName("last_name").HasMaxLength(100);
+    entity.Property(x => x.Email).HasColumnName("email").HasMaxLength(150).IsRequired();
+    entity.Property(x => x.Phone).HasColumnName("phone").HasMaxLength(30);
+    entity.Property(x => x.Address).HasColumnName("address").HasMaxLength(250);
+    entity.Property(x => x.RucDni).HasColumnName("ruc_dni").HasMaxLength(20);
+    entity.Property(x => x.PasswordHash).HasColumnName("password_hash");
+    entity.Property(x => x.GoogleId).HasColumnName("google_id");
+    entity.Property(x => x.GoogleProfilePicture).HasColumnName("google_profile_picture");
+    entity.Property(x => x.Status).HasColumnName("status");
+    entity.Property(x => x.Notes).HasColumnName("notes").HasMaxLength(500);
+    entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+    entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+
+    entity.HasIndex(x => x.Email).IsUnique().HasDatabaseName("ux_customers_email");
+    entity.HasIndex(x => x.GoogleId).IsUnique().HasDatabaseName("ux_customers_google_id");
+
+    entity.HasMany(x => x.Sales)
+        .WithOne(s => s.Customer)
+        .HasForeignKey(s => s.CustomerId)
+        .OnDelete(DeleteBehavior.SetNull);
+});
 
         // ---- OPCIONALES: solo si esas clases ya existen ----
 

@@ -20,5 +20,6 @@ using JewelShrinos.Application.DTOs.Response.Sale;
         Task<IEnumerable<SaleResponse>> GetAllAsync();
         Task<SaleResponse?> GetBySaleNumberAsync(string saleNumber);
         Task<IEnumerable<SaleResponse>> GetByCustomerAsync(int customerId);
+        
         Task<IEnumerable<SaleResponse>> GetByDateAsync(DateTime date);
     }

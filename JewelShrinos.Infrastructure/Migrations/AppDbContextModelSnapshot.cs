@@ -66,54 +66,83 @@ namespace JewelShrinos.Infrastructure.Migrations
                 {
                     b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CustomerId"));
 
                     b.Property<string>("Address")
-                        .HasColumnType("text");
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("address");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("first_name");
 
                     b.Property<string>("GoogleId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("google_id");
 
                     b.Property<string>("GoogleProfilePicture")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("google_profile_picture");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("notes");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("phone");
 
                     b.Property<string>("RucDni")
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("ruc_dni");
 
                     b.Property<bool>("Status")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("status");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customer");
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ux_customers_email");
+
+                    b.HasIndex("GoogleId")
+                        .IsUnique()
+                        .HasDatabaseName("ux_customers_google_id");
+
+                    b.ToTable("customers", (string)null);
                 });
 
             modelBuilder.Entity("JewelShrinos.Core.Entities.Inventory", b =>
@@ -178,12 +207,9 @@ namespace JewelShrinos.Infrastructure.Migrations
                     b.Property<int>("InventoryMovementId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("inventory_movement_id");
+                        .HasColumnName("movement_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InventoryMovementId"));
-
-                    b.Property<int?>("InventoryId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("MovementDate")
                         .HasColumnType("timestamp with time zone")
@@ -191,11 +217,13 @@ namespace JewelShrinos.Infrastructure.Migrations
 
                     b.Property<string>("MovementType")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("movement_type");
 
                     b.Property<string>("Observations")
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("observations");
 
                     b.Property<int>("ProductId")
@@ -211,7 +239,8 @@ namespace JewelShrinos.Infrastructure.Migrations
                         .HasColumnName("reference_id");
 
                     b.Property<string>("ReferenceType")
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("reference_type");
 
                     b.Property<int?>("StockAfter")
@@ -223,11 +252,10 @@ namespace JewelShrinos.Infrastructure.Migrations
                         .HasColumnName("stock_before");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.HasKey("InventoryMovementId");
-
-                    b.HasIndex("InventoryId");
 
                     b.HasIndex("ProductId");
 
@@ -654,9 +682,6 @@ namespace JewelShrinos.Infrastructure.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("payment_method");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SaleNumber")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -699,8 +724,6 @@ namespace JewelShrinos.Infrastructure.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("SaleNumber")
                         .IsUnique();
 
@@ -734,9 +757,6 @@ namespace JewelShrinos.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("product_id");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("integer")
                         .HasColumnName("quantity");
@@ -756,8 +776,6 @@ namespace JewelShrinos.Infrastructure.Migrations
                     b.HasKey("SaleDetailId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.HasIndex("SaleId");
 
@@ -844,10 +862,6 @@ namespace JewelShrinos.Infrastructure.Migrations
 
             modelBuilder.Entity("JewelShrinos.Core.Entities.InventoryMovement", b =>
                 {
-                    b.HasOne("JewelShrinos.Core.Entities.Inventory", null)
-                        .WithMany("InventoryMovements")
-                        .HasForeignKey("InventoryId");
-
                     b.HasOne("JewelShrinos.Core.Entities.Product", "Product")
                         .WithMany("InventoryMovements")
                         .HasForeignKey("ProductId")
@@ -959,31 +973,20 @@ namespace JewelShrinos.Infrastructure.Migrations
                 {
                     b.HasOne("JewelShrinos.Core.Entities.Customer", "Customer")
                         .WithMany("Sales")
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("JewelShrinos.Core.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Customer");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("JewelShrinos.Core.Entities.SaleDetail", b =>
                 {
                     b.HasOne("JewelShrinos.Core.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("SaleDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_sale_details_products");
-
-                    b.HasOne("JewelShrinos.Core.Entities.Product", null)
-                        .WithMany("SaleDetails")
-                        .HasForeignKey("ProductId1");
 
                     b.HasOne("JewelShrinos.Core.Entities.Sale", "Sale")
                         .WithMany("SaleDetails")
@@ -1007,11 +1010,6 @@ namespace JewelShrinos.Infrastructure.Migrations
                     b.Navigation("Returns");
 
                     b.Navigation("Sales");
-                });
-
-            modelBuilder.Entity("JewelShrinos.Core.Entities.Inventory", b =>
-                {
-                    b.Navigation("InventoryMovements");
                 });
 
             modelBuilder.Entity("JewelShrinos.Core.Entities.Material", b =>
