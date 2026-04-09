@@ -2,11 +2,11 @@
  using JewelShrinos.Core.Entities;
 using System.Linq.Expressions;
 
-
  
 
+using JewelShrinos.Application.DTOs.Request.Purchase;
+using JewelShrinos.Application.DTOs.Response.Purchase;
 
-  
  public interface IPurchaseService
     {
         Task<PurchaseResponse> CreatePurchaseAsync(CreatePurchaseRequest request);

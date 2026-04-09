@@ -6,7 +6,7 @@ using System.Linq.Expressions;
     /// Control de stock
     /// </summary>
  
-
+using JewelShrinos.Application.DTOs.Response.Inventory;
 
         public interface IInventoryService
     {

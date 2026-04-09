@@ -1,6 +1,5 @@
 using JewelShrinos.Application.DTOs.Request.Sunat;
-using JewelShrinos.Core.Entities;
-using System.Linq.Expressions;  
+using JewelShrinos.Application.DTOs.Response.Sunat;
 
 namespace JewelShrinos.Application.Interfaces
 {

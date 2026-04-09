@@ -1,9 +1,7 @@
-using JewelShrinos.Core.Entities;
-using System.Linq.Expressions;  
-  /// <summary>
-    /// Servicio de Clientes
-    /// Soporte para login local y Google OAuth
-    /// </summary>
+
+using JewelShrinos.Application.DTOs.Request.Customer;
+using JewelShrinos.Application.DTOs.Response.Customer;
+
 
  
  

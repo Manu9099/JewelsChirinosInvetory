@@ -1,6 +1,5 @@
- using JewelShrinos.Core.Entities;
-using System.Linq.Expressions;
- 
+using JewelShrinos.Application.DTOs.Request.Sale;
+using JewelShrinos.Application.DTOs.Response.Sale;
  /// <summary>
     /// Servicio de Ventas 🔥 CRÍTICO
     /// Aquí se descarga el inventario automáticamente
