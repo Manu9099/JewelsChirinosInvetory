@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JewelShrinos.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95f7db2462007b96d16fc5c0685880f8f1ccf31d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb437261890b057affe5df13316a5feedb3f0f8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("JewelShrinos.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JewelShrinos.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -173,26 +173,26 @@ await _inventoryMovementRepository.AddAsync(movement);
         ?? throw new InvalidOperationException("No se pudo recuperar la compra recibida.");
 }
 
-    public async Task<bool> CancelPurchaseAsync(int purchaseId)
-    {
-        var purchase = await _purchaseRepository.AsQueryable()
-            .Include(p => p.PurchaseDetails)
-            .FirstOrDefaultAsync(p => p.PurchaseId == purchaseId);
+   public async Task<bool> CancelPurchaseAsync(int purchaseId)
+{
+    var purchase = await _purchaseRepository.AsQueryable()
+        .Include(p => p.PurchaseDetails)
+        .FirstOrDefaultAsync(p => p.PurchaseId == purchaseId);
 
-        if (purchase is null)
-            return false;
+    if (purchase is null) return false;
 
-        if (purchase.PurchaseDetails.Any(d => d.QuantityReceived > 0))
-            throw new InvalidOperationException("No puedes cancelar una compra que ya recibió mercadería.");
+    if (purchase.PurchaseDetails.Any(d => d.QuantityReceived > 0))
+        throw new InvalidOperationException("No puedes cancelar una compra que ya recibió mercadería.");
 
-        purchase.PurchaseStatus = "CANCELLED";
-        purchase.UpdatedAt = DateTime.UtcNow;
+    purchase.PurchaseStatus = "CANCELLED";
+    purchase.UpdatedAt = DateTime.UtcNow;
 
-        await _purchaseRepository.UpdateAsync(purchase);
-        await _purchaseRepository.SaveChangesAsync();
+    // NO llames UpdateAsync(purchase) aquí.
+    // purchase ya está trackeada por EF porque vino de un query.
 
-        return true;
-    }
+    await _purchaseRepository.SaveChangesAsync();
+    return true;
+}
 
     public async Task<PurchaseResponse?> GetByIdAsync(int id)
     {

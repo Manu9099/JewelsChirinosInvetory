@@ -139,19 +139,23 @@ modelBuilder.Entity<InventoryMovement>(entity =>
     entity.ToTable("inventory_movements");
     entity.HasKey(x => x.InventoryMovementId);
 
+    // usa aquí el nombre REAL de tu PK en BD:
     entity.Property(x => x.InventoryMovementId).HasColumnName("movement_id");
+
     entity.Property(x => x.ProductId).HasColumnName("product_id");
+   
+    entity.Property(x => x.UserId).HasColumnName("user_id");
+
     entity.Property(x => x.MovementType).HasColumnName("movement_type").HasMaxLength(50).IsRequired();
     entity.Property(x => x.Quantity).HasColumnName("quantity");
     entity.Property(x => x.StockBefore).HasColumnName("stock_before");
     entity.Property(x => x.StockAfter).HasColumnName("stock_after");
     entity.Property(x => x.ReferenceType).HasColumnName("reference_type").HasMaxLength(50);
     entity.Property(x => x.ReferenceId).HasColumnName("reference_id");
-    entity.Property(x => x.UserId).HasColumnName("user_id");
     entity.Property(x => x.Observations).HasColumnName("observations").HasMaxLength(500);
     entity.Property(x => x.MovementDate).HasColumnName("movement_date");
 
-    entity.HasOne(x => x.Product)
+  entity.HasOne(x => x.Product)
         .WithMany(p => p.InventoryMovements)
         .HasForeignKey(x => x.ProductId)
         .OnDelete(DeleteBehavior.Restrict);
@@ -175,6 +179,9 @@ modelBuilder.Entity<Inventory>(entity =>
     entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
 
     entity.HasIndex(x => x.ProductId).IsUnique();
+
+        entity.Ignore("InventoryMovements");
+
 
     entity.HasOne(x => x.Product)
         .WithOne(p => p.Inventory)
@@ -261,6 +268,7 @@ modelBuilder.Entity<Inventory>(entity =>
             entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
 
             entity.HasIndex(x => x.SaleNumber).IsUnique();
+            
         });
 
         modelBuilder.Entity<SaleDetail>(entity =>
