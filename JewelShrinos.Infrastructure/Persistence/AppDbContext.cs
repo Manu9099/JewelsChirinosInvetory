@@ -20,6 +20,8 @@ public class AppDbContext : DbContext
     public DbSet<SaleDetail> SaleDetails => Set<SaleDetail>();
 
     public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Return> Returns => Set<Return>();
+    public DbSet<ReturnDetail> ReturnDetails => Set<ReturnDetail>();
 
 
 
@@ -328,6 +330,70 @@ modelBuilder.Entity<Customer>(entity =>
         .WithOne(s => s.Customer)
         .HasForeignKey(s => s.CustomerId)
         .OnDelete(DeleteBehavior.SetNull);
+            });
+
+
+            modelBuilder.Entity<Return>(entity =>
+         {
+
+
+    entity.ToTable("returns");
+    entity.HasKey(x => x.ReturnId);
+
+    entity.Property(x => x.ReturnId).HasColumnName("return_id");
+    entity.Property(x => x.ReturnNumber).HasColumnName("return_number").HasMaxLength(50).IsRequired();
+    entity.Property(x => x.SaleId).HasColumnName("sale_id");
+    entity.Property(x => x.CustomerId).HasColumnName("customer_id");
+    entity.Property(x => x.Reason).HasColumnName("reason").HasMaxLength(300).IsRequired();
+    entity.Property(x => x.RefundAmount).HasColumnName("refund_amount").HasColumnType("numeric(12,2)");
+    entity.Property(x => x.ReturnStatus).HasColumnName("return_status").HasMaxLength(50).IsRequired();
+    entity.Property(x => x.CreatedBy).HasColumnName("created_by").HasMaxLength(100);
+    entity.Property(x => x.Observations).HasColumnName("observations").HasMaxLength(500);
+    entity.Property(x => x.RequestDate).HasColumnName("request_date");
+    entity.Property(x => x.ProcessingDate).HasColumnName("processing_date");
+    entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+    entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+
+    entity.HasIndex(x => x.ReturnNumber).IsUnique().HasDatabaseName("ux_returns_return_number");
+    entity.HasIndex(x => x.ReturnStatus).HasDatabaseName("idx_returns_return_status");
+
+    entity.HasOne(x => x.Sale)
+        .WithMany(s => s.Returns)
+        .HasForeignKey(x => x.SaleId)
+        .HasConstraintName("fk_returns_sales")
+        .OnDelete(DeleteBehavior.Restrict);
+
+    entity.HasOne(x => x.Customer)
+        .WithMany(c => c.Returns)
+        .HasForeignKey(x => x.CustomerId)
+        .HasConstraintName("fk_returns_customers")
+        .OnDelete(DeleteBehavior.SetNull);
+});
+
+modelBuilder.Entity<ReturnDetail>(entity =>
+{
+    entity.ToTable("return_details");
+    entity.HasKey(x => x.ReturnDetailId);
+
+    entity.Property(x => x.ReturnDetailId).HasColumnName("return_detail_id");
+    entity.Property(x => x.ReturnId).HasColumnName("return_id");
+    entity.Property(x => x.SaleDetailId).HasColumnName("sale_detail_id");
+    entity.Property(x => x.QuantityReturned).HasColumnName("quantity_returned");
+    entity.Property(x => x.UnitPrice).HasColumnName("unit_price").HasColumnType("numeric(12,2)");
+    entity.Property(x => x.Subtotal).HasColumnName("subtotal").HasColumnType("numeric(12,2)");
+    entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+
+    entity.HasOne(x => x.Return)
+        .WithMany(r => r.ReturnDetails)
+        .HasForeignKey(x => x.ReturnId)
+        .HasConstraintName("fk_return_details_returns")
+        .OnDelete(DeleteBehavior.Cascade);
+
+    entity.HasOne(x => x.SaleDetail)
+        .WithMany(sd => sd.ReturnDetails)
+        .HasForeignKey(x => x.SaleDetailId)
+        .HasConstraintName("fk_return_details_sale_details")
+        .OnDelete(DeleteBehavior.Restrict);
 });
 
     }
