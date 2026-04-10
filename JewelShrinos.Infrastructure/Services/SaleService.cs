@@ -182,69 +182,73 @@ public class SaleService : ISaleService
         return true;
     }
 
-    public async Task<SaleResponse?> GetByIdAsync(int id)
-    {
-        var sale = await _saleRepository.AsQueryable()
-            .Include(s => s.SaleDetails)
-            .ThenInclude(d => d.Product)
-            .FirstOrDefaultAsync(s => s.SaleId == id);
+public async Task<SaleResponse?> GetByIdAsync(int id)
+{
+    var sale = await _saleRepository.AsQueryable()
+        .Include(s => s.Customer)
+        .Include(s => s.SaleDetails)
+        .ThenInclude(d => d.Product)
+        .FirstOrDefaultAsync(s => s.SaleId == id);
 
-        return sale is null ? null : MapToResponse(sale);
-    }
+    return sale is null ? null : MapToResponse(sale);
+}
 
-    public async Task<IEnumerable<SaleResponse>> GetAllAsync()
-    {
-        var sales = await _saleRepository.AsQueryable()
-            .Include(s => s.SaleDetails)
-            .ThenInclude(d => d.Product)
-            .OrderByDescending(s => s.SaleId)
-            .ToListAsync();
+public async Task<IEnumerable<SaleResponse>> GetAllAsync()
+{
+    var sales = await _saleRepository.AsQueryable()
+        .Include(s => s.Customer)
+        .Include(s => s.SaleDetails)
+        .ThenInclude(d => d.Product)
+        .OrderByDescending(s => s.SaleId)
+        .ToListAsync();
 
-        return sales.Select(MapToResponse);
-    }
+    return sales.Select(MapToResponse);
+}
 
-    public async Task<SaleResponse?> GetBySaleNumberAsync(string saleNumber)
-    {
-        if (string.IsNullOrWhiteSpace(saleNumber))
-            throw new InvalidOperationException("El número de venta es obligatorio.");
+public async Task<SaleResponse?> GetBySaleNumberAsync(string saleNumber)
+{
+    if (string.IsNullOrWhiteSpace(saleNumber))
+        throw new InvalidOperationException("El número de venta es obligatorio.");
 
-        var normalized = saleNumber.Trim();
+    var normalized = saleNumber.Trim();
 
-        var sale = await _saleRepository.AsQueryable()
-            .Include(s => s.SaleDetails)
-            .ThenInclude(d => d.Product)
-            .FirstOrDefaultAsync(s => s.SaleNumber == normalized);
+    var sale = await _saleRepository.AsQueryable()
+        .Include(s => s.Customer)
+        .Include(s => s.SaleDetails)
+        .ThenInclude(d => d.Product)
+        .FirstOrDefaultAsync(s => s.SaleNumber == normalized);
 
-        return sale is null ? null : MapToResponse(sale);
-    }
+    return sale is null ? null : MapToResponse(sale);
+}
 
-    public async Task<IEnumerable<SaleResponse>> GetByCustomerAsync(int customerId)
-    {
-        var sales = await _saleRepository.AsQueryable()
-            .Include(s => s.SaleDetails)
-            .ThenInclude(d => d.Product)
-            .Where(s => s.CustomerId == customerId)
-            .OrderByDescending(s => s.SaleId)
-            .ToListAsync();
+public async Task<IEnumerable<SaleResponse>> GetByCustomerAsync(int customerId)
+{
+    var sales = await _saleRepository.AsQueryable()
+        .Include(s => s.Customer)
+        .Include(s => s.SaleDetails)
+        .ThenInclude(d => d.Product)
+        .Where(s => s.CustomerId == customerId)
+        .OrderByDescending(s => s.SaleId)
+        .ToListAsync();
 
-        return sales.Select(MapToResponse);
-    }
+    return sales.Select(MapToResponse);
+}
 
-    public async Task<IEnumerable<SaleResponse>> GetByDateAsync(DateTime date)
-    {
-        var start = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
-        var end = start.AddDays(1);
+public async Task<IEnumerable<SaleResponse>> GetByDateAsync(DateTime date)
+{
+    var start = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
+    var end = start.AddDays(1);
 
-        var sales = await _saleRepository.AsQueryable()
-            .Include(s => s.SaleDetails)
-            .ThenInclude(d => d.Product)
-            .Where(s => s.CreatedAt >= start && s.CreatedAt < end)
-            .OrderByDescending(s => s.SaleId)
-            .ToListAsync();
+    var sales = await _saleRepository.AsQueryable()
+        .Include(s => s.Customer)
+        .Include(s => s.SaleDetails)
+        .ThenInclude(d => d.Product)
+        .Where(s => s.CreatedAt >= start && s.CreatedAt < end)
+        .OrderByDescending(s => s.SaleId)
+        .ToListAsync();
 
-        return sales.Select(MapToResponse);
-    }
-
+    return sales.Select(MapToResponse);
+}
     private async Task ValidateCreateRequestAsync(CreateSaleRequest request)
     {
         if (request.SaleDetails is null || request.SaleDetails.Count == 0)
