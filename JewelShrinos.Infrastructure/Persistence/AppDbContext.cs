@@ -399,21 +399,31 @@ modelBuilder.Entity<ReturnDetail>(entity =>
 modelBuilder.Entity<User>(entity =>
 {
     entity.ToTable("users");
+
     entity.HasKey(x => x.UserId);
 
     entity.Property(x => x.UserId).HasColumnName("user_id");
     entity.Property(x => x.Username).HasColumnName("username").HasMaxLength(50).IsRequired();
     entity.Property(x => x.Email).HasColumnName("email").HasMaxLength(150).IsRequired();
     entity.Property(x => x.FullName).HasColumnName("full_name").HasMaxLength(150).IsRequired();
-    entity.Property(x => x.PasswordHash).HasColumnName("password_hash").IsRequired();
+    entity.Property(x => x.PasswordHash).HasColumnName("password_hash").HasMaxLength(500);
     entity.Property(x => x.Role).HasColumnName("role").HasMaxLength(30).IsRequired();
-    entity.Property(x => x.Status).HasColumnName("status");
+    entity.Property(x => x.Status).HasColumnName("status").IsRequired();
+
+    entity.Property(x => x.AuthProvider).HasColumnName("auth_provider").HasMaxLength(20).IsRequired();
+    entity.Property(x => x.GoogleId).HasColumnName("google_id").HasMaxLength(100);
+    entity.Property(x => x.ProfilePictureUrl).HasColumnName("profile_picture_url").HasMaxLength(500);
+
+    entity.Property(x => x.RefreshToken).HasColumnName("refresh_token").HasMaxLength(500);
+    entity.Property(x => x.RefreshTokenExpiresAt).HasColumnName("refresh_token_expires_at");
+
     entity.Property(x => x.LastAccess).HasColumnName("last_access");
     entity.Property(x => x.CreatedAt).HasColumnName("created_at");
     entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
 
-    entity.HasIndex(x => x.Username).IsUnique().HasDatabaseName("ux_users_username");
-    entity.HasIndex(x => x.Email).IsUnique().HasDatabaseName("ux_users_email");
+    entity.HasIndex(x => x.Email).IsUnique();
+    entity.HasIndex(x => x.Username).IsUnique();
+    entity.HasIndex(x => x.GoogleId).IsUnique();
 });
 
     }

@@ -15,15 +15,18 @@ namespace JewelShrinos.Infrastructure.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly IRepository<User> _userRepository;
+private readonly IRepository<User> _userRepository;
     private readonly IConfiguration _configuration;
+    private readonly GoogleTokenValidator _googleTokenValidator;
 
-    public AuthenticationService(
+   public AuthenticationService(
         IRepository<User> userRepository,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        GoogleTokenValidator googleTokenValidator)
     {
         _userRepository = userRepository;
         _configuration = configuration;
+        _googleTokenValidator = googleTokenValidator;
     }
 
     public async Task<UserResponse> RegisterAsync(RegisterUserRequest request)
@@ -243,4 +246,86 @@ public class AuthenticationService : IAuthenticationService
 
         return CryptographicOperations.FixedTimeEquals(actualHash, expectedHash);
     }
+
+  public async Task<LoginResponse> GoogleLoginAsync(GoogleLoginRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.IdToken))
+            throw new InvalidOperationException("El IdToken es obligatorio.");
+
+        var payload = await _googleTokenValidator.ValidateAsync(request.IdToken);
+
+        var email = payload.Email?.Trim().ToLowerInvariant()
+            ?? throw new InvalidOperationException("Google no devolvió email.");
+
+        var user = await _userRepository.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+
+        if (user is null)
+        {
+            var baseUsername = email.Split('@')[0];
+            var username = await GenerateUniqueUsernameAsync(baseUsername);
+
+            user = new User
+            {
+                Username = username,
+                Email = email,
+                FullName = payload.Name ?? baseUsername,
+                PasswordHash = null,
+                Role = "SELLER",
+                Status = true,
+                AuthProvider = "GOOGLE",
+                GoogleId = payload.Subject,
+                ProfilePictureUrl = payload.Picture,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                LastAccess = DateTime.UtcNow
+            };
+
+            await _userRepository.AddAsync(user);
+        }
+        else
+        {
+            if (!user.Status)
+                throw new InvalidOperationException("El usuario está desactivado.");
+
+            user.AuthProvider = "GOOGLE";
+            user.GoogleId ??= payload.Subject;
+            user.ProfilePictureUrl = payload.Picture;
+            user.FullName = payload.Name ?? user.FullName;
+            user.LastAccess = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.UtcNow;
+        }
+
+        await _userRepository.SaveChangesAsync();
+
+        return new LoginResponse
+        {
+            Success = true,
+            Message = "Login con Google correcto.",
+            AccessToken = GenerateJwt(user),
+            RefreshToken = null,
+            User = new UserResponse
+            {
+                UserId = user.UserId,
+                Username = user.Username,
+                Email = user.Email,
+                FullName = user.FullName,
+                Role = user.Role
+            }
+        };
+    }
+
+    private async Task<string> GenerateUniqueUsernameAsync(string baseUsername)
+    {
+        var username = baseUsername.ToLowerInvariant();
+        var counter = 1;
+
+        while (await _userRepository.AnyAsync(u => u.Username.ToLower() == username))
+        {
+            username = $"{baseUsername.ToLowerInvariant()}{counter}";
+            counter++;
+        }
+
+        return username;
+    }
+
 }

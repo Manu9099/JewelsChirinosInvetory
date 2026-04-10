@@ -80,4 +80,17 @@ public class AuthController : ControllerBase
 
         return Ok(new { message = "Usuario desactivado correctamente." });
     }
+    [HttpPost("google-login")]
+    public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+    {
+        try
+        {
+            var result = await _authService.GoogleLoginAsync(request);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
 }
