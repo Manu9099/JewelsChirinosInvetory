@@ -130,3 +130,11 @@ C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\obj\Deb
 C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\obj\Debug\net10.0\JewelShrinos.API.pdb
 C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\obj\Debug\net10.0\JewelShrinos.API.genruntimeconfig.cache
 C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\obj\Debug\net10.0\ref\JewelShrinos.API.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\manuc\OneDrive\Desktop\JewelsChirinosInventory\JewelShrinos.API\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll

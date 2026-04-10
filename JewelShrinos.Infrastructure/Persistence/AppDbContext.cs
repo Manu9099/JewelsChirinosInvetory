@@ -22,6 +22,7 @@ public class AppDbContext : DbContext
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<Return> Returns => Set<Return>();
     public DbSet<ReturnDetail> ReturnDetails => Set<ReturnDetail>();
+    public DbSet<User> Users => Set<User>();
 
 
 
@@ -394,6 +395,25 @@ modelBuilder.Entity<ReturnDetail>(entity =>
         .HasForeignKey(x => x.SaleDetailId)
         .HasConstraintName("fk_return_details_sale_details")
         .OnDelete(DeleteBehavior.Restrict);
+});
+modelBuilder.Entity<User>(entity =>
+{
+    entity.ToTable("users");
+    entity.HasKey(x => x.UserId);
+
+    entity.Property(x => x.UserId).HasColumnName("user_id");
+    entity.Property(x => x.Username).HasColumnName("username").HasMaxLength(50).IsRequired();
+    entity.Property(x => x.Email).HasColumnName("email").HasMaxLength(150).IsRequired();
+    entity.Property(x => x.FullName).HasColumnName("full_name").HasMaxLength(150).IsRequired();
+    entity.Property(x => x.PasswordHash).HasColumnName("password_hash").IsRequired();
+    entity.Property(x => x.Role).HasColumnName("role").HasMaxLength(30).IsRequired();
+    entity.Property(x => x.Status).HasColumnName("status");
+    entity.Property(x => x.LastAccess).HasColumnName("last_access");
+    entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+    entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+
+    entity.HasIndex(x => x.Username).IsUnique().HasDatabaseName("ux_users_username");
+    entity.HasIndex(x => x.Email).IsUnique().HasDatabaseName("ux_users_email");
 });
 
     }
