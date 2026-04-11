@@ -11,4 +11,6 @@ public interface IAuthenticationService
     Task<UserResponse?> GetByIdAsync(int userId);
     Task<bool> ChangePasswordAsync(int userId, ChangePasswordRequest request);
     Task<bool> DisableAsync(int userId);
+    Task<CurrentUserResponse?> GetCurrentUserAsync(int userId);
+
 }

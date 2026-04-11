@@ -327,5 +327,21 @@ private readonly IRepository<User> _userRepository;
 
         return username;
     }
+    public async Task<CurrentUserResponse?> GetCurrentUserAsync(int userId)
+{
+    var user = await _userRepository.FirstOrDefaultAsync(u => u.UserId == userId);
+
+    if (user is null || !user.Status)
+        return null;
+
+    return new CurrentUserResponse
+    {
+        UserId = user.UserId,
+        Username = user.Username,
+        Email = user.Email,
+        FullName = user.FullName,
+        Role = user.Role
+    };
+}
 
 }

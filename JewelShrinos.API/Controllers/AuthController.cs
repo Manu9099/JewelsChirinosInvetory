@@ -2,6 +2,9 @@ using JewelShrinos.Application.DTOs.Request.Auth;
 using JewelShrinos.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+
 
 namespace JewelShrinos.API.Controllers;
 
@@ -92,5 +95,22 @@ public class AuthController : ControllerBase
         {
             return BadRequest(new { message = ex.Message });
         }
+    }
+
+     [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+            return Unauthorized(new { message = "Token inválido." });
+
+        var user = await _authService.GetCurrentUserAsync(userId);
+
+        if (user is null)
+            return NotFound(new { message = "Usuario no encontrado." });
+
+        return Ok(user);
     }
 }
