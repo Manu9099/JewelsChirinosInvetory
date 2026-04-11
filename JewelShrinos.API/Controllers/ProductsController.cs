@@ -1,9 +1,11 @@
 using JewelShrinos.Application.DTOs.Request.Product;
 using JewelShrinos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JewelShrinos.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
@@ -15,13 +17,15 @@ public class ProductsController : ControllerBase
         _productService = productService;
     }
 
+   [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         var products = await _productService.GetAllAsync();
         return Ok(products);
     }
-
+    
+    [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -33,6 +37,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
+   [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("by-code/{code}")]
     public async Task<IActionResult> GetByCode(string code)
     {
@@ -44,6 +49,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
+    [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("by-barcode/{barcode}")]
     public async Task<IActionResult> GetByBarcode(string barcode)
     {
@@ -54,7 +60,8 @@ public class ProductsController : ControllerBase
 
         return Ok(product);
     }
-
+    
+   [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("by-qrcode/{qrCode}")]
     public async Task<IActionResult> GetByQrCode(string qrCode)
     {
@@ -65,7 +72,8 @@ public class ProductsController : ControllerBase
 
         return Ok(product);
     }
-
+   
+    [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("category/{categoryId:int}")]
     public async Task<IActionResult> GetByCategory(int categoryId)
     {
@@ -73,13 +81,16 @@ public class ProductsController : ControllerBase
         return Ok(products);
     }
 
+   [Authorize (Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("material/{materialId:int}")]
     public async Task<IActionResult> GetByMaterial(int materialId)
     {
         var products = await _productService.GetByMaterialAsync(materialId);
         return Ok(products);
     }
+    
 
+    [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateProductRequest request)
     {
@@ -93,7 +104,8 @@ public class ProductsController : ControllerBase
             return Conflict(new { message = ex.Message });
         }
     }
-
+    
+    [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateProductRequest request)
     {
@@ -112,6 +124,7 @@ public class ProductsController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

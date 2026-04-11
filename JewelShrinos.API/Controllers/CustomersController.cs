@@ -1,9 +1,11 @@
 using JewelShrinos.Application.DTOs.Request.Customer;
 using JewelShrinos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JewelShrinos.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CustomersController : ControllerBase
@@ -14,7 +16,8 @@ public class CustomersController : ControllerBase
     {
         _customerService = customerService;
     }
-
+   
+    [Authorize(Roles = "ADMIN,SELLER")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -31,6 +34,8 @@ public class CustomersController : ControllerBase
         return Ok(customer);
     }
 
+
+   [Authorize(Roles = "ADMIN,SELLER")]
     [HttpGet("by-email/{email}")]
     public async Task<IActionResult> GetByEmail(string email)
     {
@@ -38,8 +43,9 @@ public class CustomersController : ControllerBase
         if (customer is null) return NotFound(new { message = "Cliente no encontrado." });
 
         return Ok(customer);
-    }
+    } 
 
+   [Authorize(Roles = "ADMIN,SELLER")] 
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterCustomerRequest request)
     {
@@ -53,7 +59,8 @@ public class CustomersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+   
+   [Authorize(Roles = "ADMIN,SELLER")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateCustomerRequest request)
     {
@@ -67,7 +74,8 @@ public class CustomersController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+   
+   [Authorize(Roles = "ADMIN")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

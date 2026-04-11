@@ -1,8 +1,10 @@
 using JewelShrinos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JewelShrinos.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class InventoryController : ControllerBase
@@ -14,6 +16,7 @@ public class InventoryController : ControllerBase
         _inventoryService = inventoryService;
     }
 
+   [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("{productId:int}")]
     public async Task<IActionResult> GetByProduct(int productId)
     {
@@ -25,6 +28,7 @@ public class InventoryController : ControllerBase
         return Ok(result);
     }
 
+   [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpGet("low-stock")]
     public async Task<IActionResult> GetLowStock([FromQuery] int threshold = 5)
     {
@@ -38,7 +42,8 @@ public class InventoryController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+  
+    [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpGet("{productId:int}/movements")]
     public async Task<IActionResult> GetMovements(int productId)
     {
@@ -46,6 +51,7 @@ public class InventoryController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpPost("{productId:int}/adjust")]
     public async Task<IActionResult> Adjust(
         int productId,
@@ -71,6 +77,7 @@ public class InventoryController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpPost("{productId:int}/reserve")]
     public async Task<IActionResult> Reserve(
         int productId,
@@ -94,6 +101,7 @@ public class InventoryController : ControllerBase
         }
     }
 
+   [Authorize(Roles = "ADMIN,WAREHOUSE,SELLER")]
     [HttpPost("{productId:int}/release-reserve")]
     public async Task<IActionResult> ReleaseReserve(
         int productId,

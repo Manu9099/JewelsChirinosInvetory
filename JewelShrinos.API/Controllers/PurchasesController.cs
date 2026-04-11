@@ -1,9 +1,11 @@
 using JewelShrinos.Application.DTOs.Request.Purchase;
 using JewelShrinos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JewelShrinos.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class PurchasesController : ControllerBase
@@ -15,6 +17,7 @@ public class PurchasesController : ControllerBase
         _purchaseService = purchaseService;
     }
 
+    [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -22,6 +25,7 @@ public class PurchasesController : ControllerBase
         return Ok(purchases);
     }
 
+   [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -32,6 +36,7 @@ public class PurchasesController : ControllerBase
         return Ok(purchase);
     }
 
+   [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpGet("by-number/{purchaseNumber}")]
     public async Task<IActionResult> GetByPurchaseNumber(string purchaseNumber)
     {
@@ -42,6 +47,8 @@ public class PurchasesController : ControllerBase
         return Ok(purchase);
     }
 
+
+      [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpGet("supplier/{supplierId:int}")]
     public async Task<IActionResult> GetBySupplier(int supplierId)
     {
@@ -49,6 +56,8 @@ public class PurchasesController : ControllerBase
         return Ok(purchases);
     }
 
+
+   [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePurchaseRequest request)
     {
@@ -63,6 +72,8 @@ public class PurchasesController : ControllerBase
         }
     }
 
+
+      [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpPost("{purchaseId:int}/receive")]
     public async Task<IActionResult> Receive(int purchaseId, [FromBody] ReceivePurchaseRequest request)
     {
@@ -81,6 +92,8 @@ public class PurchasesController : ControllerBase
         }
     }
 
+
+      [Authorize(Roles = "ADMIN,WAREHOUSE")]
     [HttpPost("{purchaseId:int}/cancel")]
     public async Task<IActionResult> Cancel(int purchaseId)
     {

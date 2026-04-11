@@ -1,9 +1,11 @@
 using JewelShrinos.Application.DTOs.Request.Sale;
 using JewelShrinos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JewelShrinos.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class SalesController : ControllerBase
@@ -15,6 +17,7 @@ public class SalesController : ControllerBase
         _saleService = saleService;
     }
 
+    [Authorize(Roles = "ADMIN,SELLER")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -22,6 +25,7 @@ public class SalesController : ControllerBase
         return Ok(sales);
     }
 
+   [Authorize(Roles = "ADMIN,SELLER")]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -31,6 +35,7 @@ public class SalesController : ControllerBase
         return Ok(sale);
     }
 
+    [Authorize(Roles = "ADMIN,SELLER")]
     [HttpGet("by-number/{saleNumber}")]
     public async Task<IActionResult> GetBySaleNumber(string saleNumber)
     {
@@ -40,6 +45,8 @@ public class SalesController : ControllerBase
         return Ok(sale);
     }
 
+
+   [Authorize(Roles = "ADMIN,SELLER")]
     [HttpGet("customer/{customerId:int}")]
     public async Task<IActionResult> GetByCustomer(int customerId)
     {
@@ -48,7 +55,7 @@ public class SalesController : ControllerBase
     }
 
     
-
+    [Authorize(Roles = "ADMIN,SELLER")]
     [HttpGet("date/{date}")]
     public async Task<IActionResult> GetByDate(DateTime date)
     {
@@ -56,6 +63,7 @@ public class SalesController : ControllerBase
         return Ok(sales);
     }
 
+    [Authorize(Roles = "ADMIN,SELLER")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateSaleRequest request)
     {
@@ -70,6 +78,7 @@ public class SalesController : ControllerBase
         }
     }
 
+   [Authorize(Roles = "ADMIN")]
     [HttpPost("{saleId:int}/cancel")]
     public async Task<IActionResult> Cancel(int saleId)
     {

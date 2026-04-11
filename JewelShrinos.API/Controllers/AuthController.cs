@@ -19,6 +19,7 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
     {
@@ -32,7 +33,8 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
+     
+   [AllowAnonymous]  
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
@@ -83,6 +85,8 @@ public class AuthController : ControllerBase
 
         return Ok(new { message = "Usuario desactivado correctamente." });
     }
+    
+    [AllowAnonymous]
     [HttpPost("google-login")]
     public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
     {
