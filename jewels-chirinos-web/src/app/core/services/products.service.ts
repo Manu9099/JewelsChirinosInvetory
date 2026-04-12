@@ -22,4 +22,8 @@ export class ProductsService {
 
     return this.products$;
   }
+
+  clearCache(): void {
+    this.products$ = undefined;
+  }
 }

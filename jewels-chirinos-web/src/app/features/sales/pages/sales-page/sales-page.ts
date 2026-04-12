@@ -8,6 +8,7 @@ import { SalesService } from '../../../../core/services/sales.service';
 import { Customer } from '../../../../shared/models/customer.model';
 import { Product } from '../../../../shared/models/product.model';
 import { CreateSaleRequest } from '../../../../shared/models/sale.model';
+import { forkJoin } from 'rxjs';
 
 interface CartItem {
   productId: number;
@@ -69,31 +70,29 @@ export class SalesPage implements OnInit {
     this.loadData();
   }
 
-  loadData(): void {
-    this.loading = true;
-    this.error = '';
+loadData(forceRefresh = false): void {
+  this.loading = true;
+  this.error = '';
 
-    this.productsService.getAll().subscribe({
-      next: (products) => {
-        this.products.set(products ?? []);
+  forkJoin({
+    products: this.productsService.getAll(forceRefresh),
+    customers: this.customersService.getAll(forceRefresh)
+  }).subscribe({
+    next: ({ products, customers }) => {
+      this.products.set(products ?? []);
+      this.customers.set(customers ?? []);
+      this.loading = false;
+    },
+    error: (err) => {
+      this.loading = false;
+      this.error = err?.error?.message ?? 'No se pudo cargar la información.';
+    }
+  });
+}
 
-        this.customersService.getAll().subscribe({
-          next: (customers) => {
-            this.customers.set(customers ?? []);
-            this.loading = false;
-          },
-          error: () => {
-            this.loading = false;
-            this.error = 'No se pudieron cargar los clientes.';
-          }
-        });
-      },
-      error: () => {
-        this.loading = false;
-        this.error = 'No se pudieron cargar los productos.';
-      }
-    });
-  }
+trackByProductId = (_: number, product: Product) => product.productId;
+trackByCustomerId = (_: number, customer: Customer) => customer.customerId;
+trackByCartItem = (_: number, item: CartItem) => item.productId;
 
   addToCart(product: Product): void {
     if (product.stock <= 0) return;

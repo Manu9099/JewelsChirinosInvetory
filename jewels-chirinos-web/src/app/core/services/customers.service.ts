@@ -22,4 +22,8 @@ export class CustomersService {
 
     return this.customers$;
   }
+
+  clearCache(): void {
+    this.customers$ = undefined;
+  }
 }

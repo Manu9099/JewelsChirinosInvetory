@@ -20,7 +20,7 @@
     </div>
 
     <div class="products-grid">
-      <article class="product-card" *ngFor="let product of filteredProducts()">
+      <article class="product-card" *ngFor="let product of filteredProducts(); trackBy: trackByProductId">
         <div>
           <strong>{{ product.name }}</strong>
           <small>{{ product.code }}</small>
@@ -48,7 +48,7 @@
     <label>Cliente</label>
     <select class="app-select" [(ngModel)]="selectedCustomerId">
       <option [ngValue]="null">Sin cliente</option>
-      <option *ngFor="let customer of customers()" [ngValue]="customer.customerId">
+      <option *ngFor="let customer of customers(); trackBy: trackByCustomerId" [ngValue]="customer.customerId">
         {{ customer.fullName }}
       </option>
     </select>
@@ -63,7 +63,7 @@
     </select>
 
     <div class="cart-list" *ngIf="cart().length; else emptyCart">
-      <article class="cart-item" *ngFor="let item of cart()">
+      <article class="cart-item" *ngFor="let item of cart(); trackBy: trackByCartItem">
         <div>
           <strong>{{ item.name }}</strong>
           <small>{{ item.code }}</small>
@@ -82,6 +82,7 @@
         <button class="remove-btn" type="button" (click)="remove(item)">Quitar</button>
       </article>
     </div>
+    
 
     <ng-template #emptyCart>
       <div class="empty-cart">
