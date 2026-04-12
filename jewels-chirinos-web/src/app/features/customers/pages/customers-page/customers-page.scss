@@ -1,0 +1,50 @@
+.panel {
+  padding: 24px;
+}
+
+.toolbar {
+  margin-bottom: 18px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.app-table th,
+.app-table td {
+  padding: 14px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.app-table th {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.main-cell {
+  display: grid;
+  gap: 4px;
+}
+
+.feedback {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-weight: 500;
+}
+
+.error {
+  background: #fef2f2;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+}

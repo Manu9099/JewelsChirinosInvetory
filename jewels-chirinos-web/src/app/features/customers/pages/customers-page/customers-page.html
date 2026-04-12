@@ -1,0 +1,60 @@
+<section class="page-header">
+  <h2 class="page-title">Clientes</h2>
+  <p class="page-subtitle">
+    Consulta clientes registrados para asociarlos a tus ventas.
+  </p>
+</section>
+
+<p class="feedback error" *ngIf="error">{{ error }}</p>
+
+<section class="app-card panel">
+  <div class="toolbar">
+    <input
+      class="app-input"
+      [(ngModel)]="search"
+      placeholder="Buscar por nombre, correo, teléfono o documento"
+    />
+  </div>
+
+  <div *ngIf="loading" class="empty-state">
+    <h3 class="empty-state-title">Cargando clientes...</h3>
+    <p class="empty-state-text">Espera un momento mientras consultamos tus registros.</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <div class="table-wrap" *ngIf="filteredCustomers().length; else noCustomers">
+      <table class="app-table">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Documento</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let customer of filteredCustomers()">
+            <td>
+              <div class="main-cell">
+                <strong>{{ customer.fullName }}</strong>
+              </div>
+            </td>
+            <td>{{ customer.email || '—' }}</td>
+            <td>{{ customer.phone || '—' }}</td>
+            <td>{{ customer.documentNumber || '—' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noCustomers>
+      <div class="empty-state">
+        <h3 class="empty-state-title">No hay clientes</h3>
+        <p class="empty-state-text">
+          Cuando registres clientes en tu sistema, aparecerán aquí.
+        </p>
+      </div>
+    </ng-template>
+  </ng-container>
+</section>

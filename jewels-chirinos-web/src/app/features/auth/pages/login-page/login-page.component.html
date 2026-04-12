@@ -1,0 +1,21 @@
+<div class="login-page">
+  <h1>Iniciar sesión</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+  <label >Usurario o Correo</label>
+  <input type="email" formControlName="email" placeholder="correo@jewelshrinos.com" />
+</div>
+
+    <div>
+      <label>Contraseña</label>
+      <input type="password" formControlName="password" />
+    </div>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+
+    <p *ngIf="error">{{ error }}</p>
+  </form>
+</div>

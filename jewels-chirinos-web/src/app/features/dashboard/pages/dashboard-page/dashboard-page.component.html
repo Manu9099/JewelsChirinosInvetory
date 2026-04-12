@@ -1,0 +1,41 @@
+<section class="hero app-card">
+  <div>
+    <h2 class="page-title">Panel de ventas</h2>
+    <p class="page-subtitle">
+      Empieza una venta nueva o revisa productos y clientes.
+    </p>
+  </div>
+
+  <button class="app-btn app-btn-primary" routerLink="/sales">Nueva venta</button>
+</section>
+
+<section class="kpi-grid">
+  <article class="app-card kpi-card" *ngFor="let stat of stats">
+    <div class="kpi-label">{{ stat.label }}</div>
+    <div class="kpi-value">{{ stat.value }}</div>
+    <div class="kpi-hint">{{ stat.hint }}</div>
+  </article>
+</section>
+
+<section class="content-grid">
+  <article class="app-card panel">
+    <h3 class="panel-title">Accesos rápidos</h3>
+
+    <div class="placeholder-list">
+      <a
+        class="placeholder-item"
+        *ngFor="let item of shortcuts"
+        [routerLink]="item.route"
+      >
+        {{ item.label }}
+      </a>
+    </div>
+  </article>
+
+  <article class="app-card panel">
+    <h3 class="panel-title">Enfoque actual</h3>
+    <p class="page-subtitle">
+      Tu sistema ya tiene autenticación, layout y base POS. Ahora estamos conectando datos reales.
+    </p>
+  </article>
+</section>

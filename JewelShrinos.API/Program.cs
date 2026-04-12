@@ -31,6 +31,17 @@ var jwtKey      = builder.Configuration["Jwt:Key"]!;
 var jwtIssuer   = builder.Configuration["Jwt:Issuer"]!;
 var jwtAudience = builder.Configuration["Jwt:Audience"]!;
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services
     .AddAuthentication(options =>
     {
@@ -88,8 +99,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAngularDev");
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
 
+app.MapControllers();
 app.Run();

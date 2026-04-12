@@ -1,0 +1,69 @@
+<section class="page-header">
+  <h2 class="page-title">Productos</h2>
+  <p class="page-subtitle">
+    Consulta tu inventario, precios y stock disponible.
+  </p>
+</section>
+
+<p class="feedback error" *ngIf="error">{{ error }}</p>
+
+<section class="app-card panel">
+  <div class="toolbar">
+    <input
+      class="app-input"
+      [(ngModel)]="search"
+      placeholder="Buscar por nombre, código, barcode, categoría o material"
+    />
+  </div>
+
+  <div *ngIf="loading" class="empty-state">
+    <h3 class="empty-state-title">Cargando productos...</h3>
+    <p class="empty-state-text">Espera un momento mientras consultamos tu inventario.</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <div class="table-wrap" *ngIf="filteredProducts().length; else noProducts">
+      <table class="app-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Código</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Categoría</th>
+            <th>Material</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let product of filteredProducts()">
+            <td>
+              <div class="main-cell">
+                <strong>{{ product.name }}</strong>
+                <small>{{ product.barcode || 'Sin barcode' }}</small>
+              </div>
+            </td>
+            <td>{{ product.code }}</td>
+            <td>S/ {{ product.salePrice | number:'1.2-2' }}</td>
+            <td>
+              <span class="stock-badge" [class.low]="product.stock <= 5">
+                {{ product.stock }}
+              </span>
+            </td>
+            <td>{{ product.categoryName || '—' }}</td>
+            <td>{{ product.materialName || '—' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noProducts>
+      <div class="empty-state">
+        <h3 class="empty-state-title">No hay productos</h3>
+        <p class="empty-state-text">
+          Cuando cargues productos en tu backend, aparecerán aquí.
+        </p>
+      </div>
+    </ng-template>
+  </ng-container>
+</section>
