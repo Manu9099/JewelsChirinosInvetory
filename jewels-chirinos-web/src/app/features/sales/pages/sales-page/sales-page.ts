@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
+
 import { AuthService } from '../../../../core/services/auth';
 import { CustomersService } from '../../../../core/services/customers.service';
 import { ProductsService } from '../../../../core/services/products.service';
@@ -8,7 +10,6 @@ import { SalesService } from '../../../../core/services/sales.service';
 import { Customer } from '../../../../shared/models/customer.model';
 import { Product } from '../../../../shared/models/product.model';
 import { CreateSaleRequest } from '../../../../shared/models/sale.model';
-import { forkJoin } from 'rxjs';
 
 interface CartItem {
   productId: number;
@@ -32,6 +33,8 @@ export class SalesPage implements OnInit {
   private salesService = inject(SalesService);
   private authService = inject(AuthService);
 
+  private readonly user = this.authService.getUser();
+
   products = signal<Product[]>([]);
   customers = signal<Customer[]>([]);
   cart = signal<CartItem[]>([]);
@@ -47,6 +50,8 @@ export class SalesPage implements OnInit {
   error = '';
   success = '';
 
+  readonly canAccess = ['ADMIN', 'SELLER'].includes(this.user?.role ?? '');
+
   filteredProducts = computed(() => {
     const term = this.search.trim().toLowerCase();
     if (!term) return this.products().slice(0, 12);
@@ -54,7 +59,7 @@ export class SalesPage implements OnInit {
     return this.products().filter((p) =>
       p.name?.toLowerCase().includes(term) ||
       p.code?.toLowerCase().includes(term) ||
-      p.barcode?.toLowerCase().includes(term)
+      p.barcode?.toLowerCase()?.includes(term)
     );
   });
 
@@ -67,32 +72,41 @@ export class SalesPage implements OnInit {
   );
 
   ngOnInit(): void {
+    if (!this.canAccess) {
+      this.error = 'No tienes permisos para registrar ventas.';
+      return;
+    }
+
     this.loadData();
   }
 
-loadData(forceRefresh = false): void {
-  this.loading = true;
-  this.error = '';
+  loadData(forceRefresh = false): void {
+    this.loading = true;
+    this.error = '';
 
-  forkJoin({
-    products: this.productsService.getAll(forceRefresh),
-    customers: this.customersService.getAll(forceRefresh)
-  }).subscribe({
-    next: ({ products, customers }) => {
-      this.products.set(products ?? []);
-      this.customers.set(customers ?? []);
-      this.loading = false;
-    },
-    error: (err) => {
-      this.loading = false;
-      this.error = err?.error?.message ?? 'No se pudo cargar la información.';
-    }
-  });
-}
+    forkJoin({
+      products: this.productsService.getAll(forceRefresh),
+      customers: this.customersService.getAll(forceRefresh)
+    }).subscribe({
+      next: ({ products, customers }) => {
+        this.products.set(products ?? []);
+        this.customers.set(customers ?? []);
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = err?.error?.message ?? 'No se pudo cargar la información.';
+      }
+    });
+  }
 
-trackByProductId = (_: number, product: Product) => product.productId;
-trackByCustomerId = (_: number, customer: Customer) => customer.customerId;
-trackByCartItem = (_: number, item: CartItem) => item.productId;
+  trackByProductId = (_: number, product: Product) => product.productId;
+  trackByCustomerId = (_: number, customer: Customer) => customer.customerId;
+  trackByCartItem = (_: number, item: CartItem) => item.productId;
+
+  getPrice(product: Product): number {
+    return product.sellingPrice ?? product.salePrice ?? 0;
+  }
 
   addToCart(product: Product): void {
     if (product.stock <= 0) return;
@@ -108,7 +122,7 @@ trackByCartItem = (_: number, item: CartItem) => item.productId;
         productId: product.productId,
         name: product.name,
         code: product.code,
-        unitPrice: product.salePrice,
+        unitPrice: this.getPrice(product),
         quantity: 1,
         stock: product.stock
       });
@@ -122,6 +136,7 @@ trackByCartItem = (_: number, item: CartItem) => item.productId;
     const target = current.find((x) => x.productId === item.productId);
     if (!target) return;
     if (target.quantity >= target.stock) return;
+
     target.quantity += 1;
     this.cart.set(current);
   }
@@ -132,7 +147,6 @@ trackByCartItem = (_: number, item: CartItem) => item.productId;
     if (!target) return;
 
     target.quantity -= 1;
-
     this.cart.set(current.filter((x) => x.quantity > 0));
   }
 
@@ -146,8 +160,7 @@ trackByCartItem = (_: number, item: CartItem) => item.productId;
       return;
     }
 
-    const user = this.authService.getUser();
-    if (!user) {
+    if (!this.user) {
       this.error = 'No se encontró el usuario logueado.';
       return;
     }
@@ -167,7 +180,7 @@ trackByCartItem = (_: number, item: CartItem) => item.productId;
       discountAmount: this.discountAmount,
       paymentMethod: this.paymentMethod,
       observations: this.observations,
-      createdBy: user.username
+      createdBy: this.user.username
     };
 
     this.salesService.create(payload).subscribe({
@@ -179,7 +192,7 @@ trackByCartItem = (_: number, item: CartItem) => item.productId;
         this.taxAmount = 0;
         this.observations = '';
         this.selectedCustomerId = null;
-        this.loadData();
+        this.loadData(true);
       },
       error: (err) => {
         this.saving = false;

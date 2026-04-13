@@ -1,119 +1,134 @@
 <section class="page-header">
-  <h2 class="page-title">Nueva venta</h2>
-  <p class="page-subtitle">
-    Busca productos, arma el carrito y registra la venta.
-  </p>
+  <div>
+    <h2 class="page-title">Nueva venta</h2>
+    <p class="page-subtitle">
+      Busca productos con stock real, arma el carrito y registra la venta.
+    </p>
+  </div>
 </section>
 
 <p class="feedback error" *ngIf="error">{{ error }}</p>
 <p class="feedback success" *ngIf="success">{{ success }}</p>
 
-<section class="sales-layout" *ngIf="!loading; else loadingTpl">
-  <div class="app-card panel">
-    <div class="panel-head">
-      <h3 class="panel-title">Productos</h3>
-      <input
-        class="app-input"
-        [(ngModel)]="search"
-        placeholder="Buscar por nombre, código o barcode"
-      />
-    </div>
+<div *ngIf="loading" class="empty-state">
+  <h3 class="empty-state-title">Cargando productos y clientes...</h3>
+</div>
 
-    <div class="products-grid">
-      <article class="product-card" *ngFor="let product of filteredProducts(); trackBy: trackByProductId">
-        <div>
+<ng-container *ngIf="!loading && canAccess">
+  <div class="sales-layout">
+    <section class="app-card">
+      <h3>Productos</h3>
+
+      <div class="toolbar">
+        <input
+          class="app-input"
+          [(ngModel)]="search"
+          placeholder="Buscar por nombre, código o barcode"
+        />
+      </div>
+
+      <div class="products-grid">
+        <article class="product-card" *ngFor="let product of filteredProducts(); trackBy: trackByProductId">
           <strong>{{ product.name }}</strong>
           <small>{{ product.code }}</small>
-        </div>
-
-        <div class="product-meta">
           <span>Stock: {{ product.stock }}</span>
-          <strong>S/ {{ product.salePrice | number:'1.2-2' }}</strong>
-        </div>
+          <span>S/ {{ getPrice(product) | number:'1.2-2' }}</span>
 
-        <button
-          class="app-btn app-btn-primary"
-          (click)="addToCart(product)"
-          [disabled]="product.stock <= 0"
-        >
-          Agregar
-        </button>
-      </article>
-    </div>
-  </div>
-
-  <div class="app-card panel cart-panel">
-    <h3 class="panel-title">Carrito</h3>
-
-    <label>Cliente</label>
-    <select class="app-select" [(ngModel)]="selectedCustomerId">
-      <option [ngValue]="null">Sin cliente</option>
-      <option *ngFor="let customer of customers(); trackBy: trackByCustomerId" [ngValue]="customer.customerId">
-        {{ customer.fullName }}
-      </option>
-    </select>
-
-    <label>Método de pago</label>
-    <select class="app-select" [(ngModel)]="paymentMethod">
-      <option value="EFECTIVO">Efectivo</option>
-      <option value="YAPE">Yape</option>
-      <option value="PLIN">Plin</option>
-      <option value="TARJETA">Tarjeta</option>
-      <option value="TRANSFERENCIA">Transferencia</option>
-    </select>
-
-    <div class="cart-list" *ngIf="cart().length; else emptyCart">
-      <article class="cart-item" *ngFor="let item of cart(); trackBy: trackByCartItem">
-        <div>
-          <strong>{{ item.name }}</strong>
-          <small>{{ item.code }}</small>
-        </div>
-
-        <div class="qty-box">
-          <button type="button" (click)="decrease(item)">−</button>
-          <span>{{ item.quantity }}</span>
-          <button type="button" (click)="increase(item)">+</button>
-        </div>
-
-        <div class="line-total">
-          S/ {{ item.unitPrice * item.quantity | number:'1.2-2' }}
-        </div>
-
-        <button class="remove-btn" type="button" (click)="remove(item)">Quitar</button>
-      </article>
-    </div>
-    
-
-    <ng-template #emptyCart>
-      <div class="empty-cart">
-        Tu carrito está vacío.
+          <button
+            class="app-btn app-btn-primary"
+            type="button"
+            (click)="addToCart(product)"
+            [disabled]="product.stock <= 0"
+          >
+            Agregar
+          </button>
+        </article>
       </div>
-    </ng-template>
+    </section>
 
-    <label>Descuento</label>
-    <input class="app-input" type="number" [(ngModel)]="discountAmount" min="0" />
+    <section class="app-card">
+      <h3>Carrito</h3>
 
-    <label>Impuesto</label>
-    <input class="app-input" type="number" [(ngModel)]="taxAmount" min="0" />
+      <div class="form-grid">
+        <label>
+          <span>Cliente</span>
+          <select class="app-input" [(ngModel)]="selectedCustomerId">
+            <option [ngValue]="null">Sin cliente</option>
+            <option
+              *ngFor="let customer of customers(); trackBy: trackByCustomerId"
+              [ngValue]="customer.customerId"
+            >
+              {{ customer.fullName }}
+            </option>
+          </select>
+        </label>
 
-    <label>Observaciones</label>
-    <textarea class="app-textarea" rows="3" [(ngModel)]="observations"></textarea>
+        <label>
+          <span>Método de pago</span>
+          <select class="app-input" [(ngModel)]="paymentMethod">
+            <option value="EFECTIVO">Efectivo</option>
+            <option value="YAPE">Yape</option>
+            <option value="PLIN">Plin</option>
+            <option value="TARJETA">Tarjeta</option>
+            <option value="TRANSFERENCIA">Transferencia</option>
+          </select>
+        </label>
+      </div>
 
-    <div class="summary">
-      <div><span>Subtotal</span><strong>S/ {{ subtotal() | number:'1.2-2' }}</strong></div>
-      <div><span>Descuento</span><strong>S/ {{ discountAmount | number:'1.2-2' }}</strong></div>
-      <div><span>Impuesto</span><strong>S/ {{ taxAmount | number:'1.2-2' }}</strong></div>
-      <div class="total-row"><span>Total</span><strong>S/ {{ total() | number:'1.2-2' }}</strong></div>
-    </div>
+      <div class="cart-list" *ngIf="cart().length; else emptyCart">
+        <article class="cart-item" *ngFor="let item of cart(); trackBy: trackByCartItem">
+          <div>
+            <strong>{{ item.name }}</strong>
+            <small>{{ item.code }}</small>
+          </div>
 
-    <button class="app-btn app-btn-primary submit-btn" (click)="submitSale()" [disabled]="saving">
-      {{ saving ? 'Guardando...' : 'Registrar venta' }}
-    </button>
+          <div class="cart-actions">
+            <button type="button" class="app-btn app-btn-secondary" (click)="decrease(item)">−</button>
+            <span>{{ item.quantity }}</span>
+            <button type="button" class="app-btn app-btn-secondary" (click)="increase(item)">+</button>
+          </div>
+
+          <div>
+            S/ {{ item.unitPrice * item.quantity | number:'1.2-2' }}
+          </div>
+
+          <button type="button" class="app-btn app-btn-secondary" (click)="remove(item)">
+            Quitar
+          </button>
+        </article>
+      </div>
+
+      <ng-template #emptyCart>
+        <p>Tu carrito está vacío.</p>
+      </ng-template>
+
+      <div class="form-grid totals-grid">
+        <label>
+          <span>Descuento</span>
+          <input class="app-input" type="number" [(ngModel)]="discountAmount" />
+        </label>
+
+        <label>
+          <span>Impuesto</span>
+          <input class="app-input" type="number" [(ngModel)]="taxAmount" />
+        </label>
+
+        <label class="full">
+          <span>Observaciones</span>
+          <textarea class="app-input" rows="3" [(ngModel)]="observations"></textarea>
+        </label>
+      </div>
+
+      <div class="totals-box">
+        <div><span>Subtotal</span><strong>S/ {{ subtotal() | number:'1.2-2' }}</strong></div>
+        <div><span>Descuento</span><strong>S/ {{ discountAmount | number:'1.2-2' }}</strong></div>
+        <div><span>Impuesto</span><strong>S/ {{ taxAmount | number:'1.2-2' }}</strong></div>
+        <div class="grand-total"><span>Total</span><strong>S/ {{ total() | number:'1.2-2' }}</strong></div>
+      </div>
+
+      <button class="app-btn app-btn-primary full-width" type="button" (click)="submitSale()" [disabled]="saving">
+        {{ saving ? 'Guardando...' : 'Registrar venta' }}
+      </button>
+    </section>
   </div>
-</section>
-
-<ng-template #loadingTpl>
-  <section class="app-card panel">
-    Cargando productos y clientes...
-  </section>
-</ng-template>
+</ng-container>

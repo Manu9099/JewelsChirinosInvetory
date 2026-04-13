@@ -17,7 +17,15 @@ export interface CreateSaleRequest {
 export interface SaleResponse {
   saleId: number;
   saleNumber: string;
+  customerId?: number | null;
+  customerName?: string | null;
+  subtotalAmount: number;
+  taxAmount: number;
+  discountAmount: number;
   totalAmount: number;
-  paymentMethod: string;
+  paymentMethod?: string | null;
+  saleStatus: string;
+  invoiceNumber?: string | null;
+  sunatTicketNumber?: string | null;
   createdAt: string;
 }

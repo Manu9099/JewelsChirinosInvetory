@@ -26,6 +26,8 @@ builder.Services.AddScoped<IReturnService,         ReturnService>();
 builder.Services.AddScoped<IInventoryService,      InventoryService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<GoogleTokenValidator>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
+
 
 var jwtKey      = builder.Configuration["Jwt:Key"]!;
 var jwtIssuer   = builder.Configuration["Jwt:Issuer"]!;

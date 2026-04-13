@@ -1,41 +1,72 @@
-<section class="hero app-card">
+<section class="page-header">
   <div>
-    <h2 class="page-title">Panel de ventas</h2>
+    <h2 class="page-title">Dashboard</h2>
     <p class="page-subtitle">
-      Empieza una venta nueva o revisa productos y clientes.
+      Indicadores reales conectados al backend.
     </p>
   </div>
-
-  <button class="app-btn app-btn-primary" routerLink="/sales">Nueva venta</button>
 </section>
 
-<section class="kpi-grid">
-  <article class="app-card kpi-card" *ngFor="let stat of stats">
-    <div class="kpi-label">{{ stat.label }}</div>
-    <div class="kpi-value">{{ stat.value }}</div>
-    <div class="kpi-hint">{{ stat.hint }}</div>
-  </article>
-</section>
+<p class="feedback error" *ngIf="error">{{ error }}</p>
 
-<section class="content-grid">
-  <article class="app-card panel">
-    <h3 class="panel-title">Accesos rápidos</h3>
+<div *ngIf="loading" class="empty-state">
+  <h3 class="empty-state-title">Cargando dashboard...</h3>
+  <p class="empty-state-text">Estamos consultando productos, clientes y ventas.</p>
+</div>
 
-    <div class="placeholder-list">
-      <a
-        class="placeholder-item"
-        *ngFor="let item of shortcuts"
-        [routerLink]="item.route"
-      >
-        {{ item.label }}
+<ng-container *ngIf="!loading">
+  <section class="stats-row">
+    <article class="app-card stat-card" *ngIf="canSeeSales">
+      <span class="stat-label">Ventas hoy</span>
+      <strong class="stat-value">S/ {{ todaySalesTotal() | number:'1.2-2' }}</strong>
+      <small class="stat-hint">Ventas registradas en la fecha actual</small>
+    </article>
+
+    <article class="app-card stat-card">
+      <span class="stat-label">Productos activos</span>
+      <strong class="stat-value">{{ activeProducts() }}</strong>
+      <small class="stat-hint">Catálogo operativo</small>
+    </article>
+
+    <article class="app-card stat-card" *ngIf="canSeeCustomers">
+      <span class="stat-label">Clientes</span>
+      <strong class="stat-value">{{ activeCustomers() }}</strong>
+      <small class="stat-hint">Clientes disponibles para ventas</small>
+    </article>
+
+    <article class="app-card stat-card" *ngIf="canSeeSales">
+      <span class="stat-label">Tickets hoy</span>
+      <strong class="stat-value">{{ todayTickets() }}</strong>
+      <small class="stat-hint">Ventas emitidas hoy</small>
+    </article>
+
+    <article class="app-card stat-card">
+      <span class="stat-label">Stock bajo</span>
+      <strong class="stat-value">{{ lowStockCount() }}</strong>
+      <small class="stat-hint">Productos con stock entre 1 y 5</small>
+    </article>
+
+    <article class="app-card stat-card">
+      <span class="stat-label">Sin stock</span>
+      <strong class="stat-value">{{ outOfStockCount() }}</strong>
+      <small class="stat-hint">Productos agotados</small>
+    </article>
+  </section>
+
+  <section class="app-card quick-actions">
+    <h3>Accesos rápidos</h3>
+
+    <div class="quick-actions-grid">
+      <a class="app-btn app-btn-primary" routerLink="/inventory">Inventario</a>
+      <a class="app-btn app-btn-secondary" routerLink="/product-management" *ngIf="canManageProducts">
+        Gestión productos
+      </a>
+      <a class="app-btn app-btn-secondary" routerLink="/customers" *ngIf="canSeeCustomers">
+        Clientes
+      </a>
+      <a class="app-btn app-btn-secondary" routerLink="/sales" *ngIf="canSeeSales">
+        Ventas
       </a>
     </div>
-  </article>
-
-  <article class="app-card panel">
-    <h3 class="panel-title">Enfoque actual</h3>
-    <p class="page-subtitle">
-      Tu sistema ya tiene autenticación, layout y base POS. Ahora estamos conectando datos reales.
-    </p>
-  </article>
-</section>
+  </section>
+</ng-container>

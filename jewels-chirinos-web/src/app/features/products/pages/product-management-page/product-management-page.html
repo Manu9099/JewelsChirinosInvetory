@@ -1,0 +1,189 @@
+<section class="page-header">
+  <div>
+    <h2 class="page-title">Gestión de productos</h2>
+    <p class="page-subtitle">
+      Alta, edición y eliminación del catálogo.
+    </p>
+  </div>
+
+  <button class="app-btn app-btn-secondary" type="button" (click)="startCreate()">
+    Nuevo producto
+  </button>
+</section>
+
+<p class="feedback error" *ngIf="error">{{ error }}</p>
+<p class="feedback success" *ngIf="success">{{ success }}</p>
+
+<div class="layout-grid">
+  <section class="app-card form-card">
+    <h3>{{ isEditing() ? 'Editar producto' : 'Crear producto' }}</h3>
+
+    <form class="form-grid" (ngSubmit)="save()">
+      <label>
+        <span>Código</span>
+        <input class="app-input" [(ngModel)]="form.code" name="code" [disabled]="isEditing()" />
+      </label>
+
+      <label>
+        <span>Barcode</span>
+        <input class="app-input" [(ngModel)]="form.barcode" name="barcode" [disabled]="isEditing()" />
+      </label>
+
+      <label class="full">
+        <span>Nombre</span>
+        <input class="app-input" [(ngModel)]="form.name" name="name" />
+      </label>
+
+      <label class="full">
+        <span>Descripción</span>
+        <textarea class="app-input app-textarea" [(ngModel)]="form.description" name="description"></textarea>
+      </label>
+
+      <label>
+        <span>CategoryId</span>
+        <input class="app-input" type="number" [(ngModel)]="form.categoryId" name="categoryId" />
+      </label>
+
+      <label>
+        <span>MaterialId</span>
+        <input class="app-input" type="number" [(ngModel)]="form.materialId" name="materialId" />
+      </label>
+
+    <label>
+  <span>Proveedor</span>
+  <select class="app-input" [(ngModel)]="form.supplierId" name="supplierId">
+    <option [ngValue]="null">Selecciona un proveedor</option>
+    <option *ngFor="let supplier of suppliers()" [ngValue]="supplier.supplierId">
+      {{ supplier.name }}
+    </option>
+  </select>
+</label>
+
+      <label>
+        <span>Peso</span>
+        <input class="app-input" type="number" step="0.01" [(ngModel)]="form.weight" name="weight" />
+      </label>
+
+      <label>
+        <span>Costo</span>
+        <input class="app-input" type="number" step="0.01" [(ngModel)]="form.costPrice" name="costPrice" />
+      </label>
+
+      <label>
+        <span>Precio de venta</span>
+        <input class="app-input" type="number" step="0.01" [(ngModel)]="form.sellingPrice" name="sellingPrice" />
+      </label>
+
+      <label class="checkbox-row full" *ngIf="isEditing()">
+        <input type="checkbox" [(ngModel)]="form.status" name="status" />
+        <span>Producto activo</span>
+      </label>
+
+      <div class="reference-box full" *ngIf="knownCategories().length || knownMaterials().length || knownSuppliers().length">
+        <h4>Referencias detectadas desde productos existentes</h4>
+
+        <div *ngIf="knownCategories().length">
+          <strong>Categorías:</strong>
+          <div class="reference-tags">
+            <span class="tag" *ngFor="let item of knownCategories()">{{ item.id }} · {{ item.name }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="knownMaterials().length">
+          <strong>Materiales:</strong>
+          <div class="reference-tags">
+            <span class="tag" *ngFor="let item of knownMaterials()">{{ item.id }} · {{ item.name }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="knownSuppliers().length">
+          <strong>Proveedores:</strong>
+          <div class="reference-tags">
+            <span class="tag" *ngFor="let item of knownSuppliers()">{{ item.id }} · {{ item.name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions full">
+        <button class="app-btn app-btn-primary" type="submit" [disabled]="saving || !canManage">
+          {{ saving ? 'Guardando...' : (isEditing() ? 'Guardar cambios' : 'Crear producto') }}
+        </button>
+
+        <button class="app-btn app-btn-secondary" type="button" (click)="startCreate()">
+          Limpiar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="app-card list-card">
+    <h3>Productos registrados</h3>
+
+    <div class="toolbar">
+      <input
+        class="app-input"
+        [(ngModel)]="search"
+        placeholder="Buscar por nombre, código, barcode, categoría, material o proveedor"
+      />
+    </div>
+
+    <div *ngIf="loading" class="empty-state">
+      <h3 class="empty-state-title">Cargando productos...</h3>
+    </div>
+
+    <ng-container *ngIf="!loading">
+      <div class="table-wrap" *ngIf="filteredProducts().length; else noProducts">
+        <table class="app-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Código</th>
+              <th>Proveedor</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let product of filteredProducts()">
+              <td>
+                <div class="main-cell">
+                  <strong>{{ product.name }}</strong>
+                  <small>{{ product.categoryName || 'Sin categoría' }}</small>
+                </div>
+              </td>
+              <td>{{ product.code }}</td>
+              <td>{{ product.supplierName || '—' }}</td>
+              <td>S/ {{ (product.sellingPrice ?? product.salePrice ?? 0) | number:'1.2-2' }}</td>
+              <td>{{ product.stock }}</td>
+              <td>
+                <div class="row-actions">
+                  <button class="app-btn app-btn-secondary app-btn-sm" type="button" (click)="startEdit(product)">
+                    Editar
+                  </button>
+
+                  <button
+                    class="app-btn app-btn-danger app-btn-sm"
+                    type="button"
+                    (click)="remove(product)"
+                    [disabled]="!canDelete"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noProducts>
+        <div class="empty-state">
+          <h3 class="empty-state-title">No hay productos</h3>
+          <p class="empty-state-text">Cuando crees productos, aparecerán aquí.</p>
+        </div>
+      </ng-template>
+    </ng-container>
+  </section>
+</div>

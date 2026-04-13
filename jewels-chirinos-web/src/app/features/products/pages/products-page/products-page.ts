@@ -9,7 +9,7 @@ import { Product } from '../../../../shared/models/product.model';
 @Component({
   selector: 'app-products-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './products-page.html',
   styleUrl: './products-page.scss'
 })
@@ -34,7 +34,8 @@ export class ProductsPage implements OnInit {
       product.code?.toLowerCase().includes(term) ||
       product.barcode?.toLowerCase()?.includes(term) ||
       product.categoryName?.toLowerCase()?.includes(term) ||
-      product.materialName?.toLowerCase()?.includes(term)
+      product.materialName?.toLowerCase()?.includes(term) ||
+      product.supplierName?.toLowerCase()?.includes(term)
     );
   });
 
@@ -42,11 +43,11 @@ export class ProductsPage implements OnInit {
     this.loadProducts();
   }
 
-  loadProducts(): void {
+  loadProducts(forceRefresh = false): void {
     this.loading = true;
     this.error = '';
 
-    this.productsService.getAll().subscribe({
+    this.productsService.getAll(forceRefresh).subscribe({
       next: (response) => {
         this.products.set(response ?? []);
         this.loading = false;
@@ -56,5 +57,9 @@ export class ProductsPage implements OnInit {
         this.error = err?.error?.message ?? 'No se pudo cargar el inventario.';
       }
     });
+  }
+
+  getPrice(product: Product): number {
+    return product.sellingPrice ?? product.salePrice ?? 0;
   }
 }

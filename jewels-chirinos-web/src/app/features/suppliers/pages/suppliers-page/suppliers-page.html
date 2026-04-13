@@ -1,0 +1,126 @@
+<section class="page-header">
+  <div>
+    <h2 class="page-title">Proveedores</h2>
+    <p class="page-subtitle">Administra tus proveedores reales.</p>
+  </div>
+
+  <button class="app-btn app-btn-secondary" type="button" (click)="startCreate()">
+    Nuevo proveedor
+  </button>
+</section>
+
+<p class="feedback error" *ngIf="error">{{ error }}</p>
+<p class="feedback success" *ngIf="success">{{ success }}</p>
+
+<div class="layout-grid">
+  <section class="app-card form-card">
+    <h3>{{ isEditing() ? 'Editar proveedor' : 'Crear proveedor' }}</h3>
+
+    <form class="form-grid" (ngSubmit)="save()">
+      <label class="full">
+        <span>Nombre</span>
+        <input class="app-input" [(ngModel)]="form.name" name="name" />
+      </label>
+
+      <label>
+        <span>RUC / DNI</span>
+        <input class="app-input" [(ngModel)]="form.rucDni" name="rucDni" />
+      </label>
+
+      <label>
+        <span>Contacto</span>
+        <input class="app-input" [(ngModel)]="form.contactName" name="contactName" />
+      </label>
+
+      <label>
+        <span>Email</span>
+        <input class="app-input" [(ngModel)]="form.email" name="email" />
+      </label>
+
+      <label>
+        <span>Teléfono</span>
+        <input class="app-input" [(ngModel)]="form.phone" name="phone" />
+      </label>
+
+      <label class="full">
+        <span>Dirección</span>
+        <input class="app-input" [(ngModel)]="form.address" name="address" />
+      </label>
+
+      <label class="checkbox-row full" *ngIf="isEditing()">
+        <input type="checkbox" [(ngModel)]="form.status" name="status" />
+        <span>Proveedor activo</span>
+      </label>
+
+      <div class="actions full">
+        <button class="app-btn app-btn-primary" type="submit" [disabled]="saving">
+          {{ saving ? 'Guardando...' : (isEditing() ? 'Guardar cambios' : 'Crear proveedor') }}
+        </button>
+
+        <button class="app-btn app-btn-secondary" type="button" (click)="startCreate()">
+          Limpiar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="app-card list-card">
+    <h3>Proveedores registrados</h3>
+
+    <div class="toolbar">
+      <input
+        class="app-input"
+        [(ngModel)]="search"
+        placeholder="Buscar por nombre, RUC/DNI, contacto o email"
+      />
+    </div>
+
+    <div *ngIf="loading" class="empty-state">
+      <h3 class="empty-state-title">Cargando proveedores...</h3>
+    </div>
+
+    <ng-container *ngIf="!loading">
+      <div class="table-wrap" *ngIf="filteredSuppliers().length; else noSuppliers">
+        <table class="app-table">
+          <thead>
+            <tr>
+              <th>Proveedor</th>
+              <th>RUC/DNI</th>
+              <th>Contacto</th>
+              <th>Email</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let supplier of filteredSuppliers()">
+              <td>{{ supplier.name }}</td>
+              <td>{{ supplier.rucDni || '—' }}</td>
+              <td>{{ supplier.contactName || '—' }}</td>
+              <td>{{ supplier.email || '—' }}</td>
+              <td>{{ supplier.status ? 'Activo' : 'Inactivo' }}</td>
+              <td>
+                <div class="row-actions">
+                  <button class="app-btn app-btn-secondary app-btn-sm" type="button" (click)="startEdit(supplier)">
+                    Editar
+                  </button>
+                  <button class="app-btn app-btn-danger app-btn-sm" type="button" (click)="remove(supplier)">
+                    Desactivar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noSuppliers>
+        <div class="empty-state">
+          <h3 class="empty-state-title">No hay proveedores</h3>
+          <p class="empty-state-text">Cuando crees proveedores, aparecerán aquí.</p>
+        </div>
+      </ng-template>
+    </ng-container>
+  </section>
+</div>

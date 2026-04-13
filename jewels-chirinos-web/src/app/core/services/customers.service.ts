@@ -1,12 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { Customer } from '../../shared/models/customer.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CustomersService {
   private http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:5295/api/Customers';
@@ -15,9 +13,16 @@ export class CustomersService {
 
   getAll(forceRefresh = false): Observable<Customer[]> {
     if (!this.customers$ || forceRefresh) {
-      this.customers$ = this.http
-        .get<Customer[]>(this.apiUrl)
-        .pipe(shareReplay(1));
+      this.customers$ = this.http.get<Customer[]>(this.apiUrl).pipe(
+        map((customers) =>
+          (customers ?? []).map((customer) => ({
+            ...customer,
+            fullName: [customer.firstName, customer.lastName].filter(Boolean).join(' ').trim(),
+            documentNumber: customer.rucDni ?? null
+          }))
+        ),
+        shareReplay(1)
+      );
     }
 
     return this.customers$;

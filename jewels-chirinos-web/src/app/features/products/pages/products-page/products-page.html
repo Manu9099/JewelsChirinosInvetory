@@ -2,11 +2,14 @@
   <div>
     <h2 class="page-title">Inventario</h2>
     <p class="page-subtitle">
-      Consulta stock, precios y disponibilidad de tus productos.
+      Consulta stock, precios y disponibilidad reales.
     </p>
   </div>
 
-  <a routerLink="/sales" class="app-btn app-btn-primary">Ir a ventas</a>
+  <div class="header-actions">
+    <a routerLink="/product-management" class="app-btn app-btn-secondary">Gestionar productos</a>
+    <a routerLink="/sales" class="app-btn app-btn-primary">Ir a ventas</a>
+  </div>
 </section>
 
 <p class="feedback error" *ngIf="error">{{ error }}</p>
@@ -33,14 +36,14 @@
     <input
       class="app-input"
       [(ngModel)]="search"
-      placeholder="Buscar por nombre, código, barcode, categoría o material"
+      placeholder="Buscar por nombre, código, barcode, categoría, material o proveedor"
     />
   </div>
 
   <div *ngIf="loading" class="empty-state">
     <h3 class="empty-state-title">Cargando inventario...</h3>
     <p class="empty-state-text">
-      Espera un momento mientras consultamos stock, precios y disponibilidad.
+      Espera un momento mientras consultamos productos e inventario.
     </p>
   </div>
 
@@ -52,7 +55,9 @@
             <th>Producto</th>
             <th>Código</th>
             <th>Precio</th>
-            <th>Stock</th>
+            <th>Disponible</th>
+            <th>Reservado</th>
+            <th>Total</th>
             <th>Categoría</th>
             <th>Material</th>
           </tr>
@@ -67,12 +72,10 @@
               </div>
             </td>
             <td>{{ product.code }}</td>
-            <td>S/ {{ product.salePrice | number:'1.2-2' }}</td>
-            <td>
-              <span class="stock-badge" [class.low]="product.stock <= 5">
-                {{ product.stock }}
-              </span>
-            </td>
+            <td>S/ {{ getPrice(product) | number:'1.2-2' }}</td>
+            <td>{{ product.stock }}</td>
+            <td>{{ product.reservedStock ?? 0 }}</td>
+            <td>{{ product.totalStock ?? product.stock }}</td>
             <td>{{ product.categoryName || '—' }}</td>
             <td>{{ product.materialName || '—' }}</td>
           </tr>
@@ -84,7 +87,7 @@
       <div class="empty-state">
         <h3 class="empty-state-title">No hay productos registrados</h3>
         <p class="empty-state-text">
-          Cuando registres productos en tu backend, aparecerán aquí con su stock actual.
+          Cuando registres productos en tu backend, aparecerán aquí con su inventario.
         </p>
       </div>
     </ng-template>
