@@ -1,11 +1,32 @@
-<section class="page-header">
-  <h2 class="page-title">Productos</h2>
-  <p class="page-subtitle">
-    Consulta tu inventario, precios y stock disponible.
-  </p>
+<section class="page-header page-header-split">
+  <div>
+    <h2 class="page-title">Inventario</h2>
+    <p class="page-subtitle">
+      Consulta stock, precios y disponibilidad de tus productos.
+    </p>
+  </div>
+
+  <a routerLink="/sales" class="app-btn app-btn-primary">Ir a ventas</a>
 </section>
 
 <p class="feedback error" *ngIf="error">{{ error }}</p>
+
+<section class="stats-row" *ngIf="!loading && products().length">
+  <article class="app-card stat-card">
+    <span class="stat-label">Productos</span>
+    <strong class="stat-value">{{ totalProducts() }}</strong>
+  </article>
+
+  <article class="app-card stat-card">
+    <span class="stat-label">Stock bajo</span>
+    <strong class="stat-value">{{ lowStockCount() }}</strong>
+  </article>
+
+  <article class="app-card stat-card">
+    <span class="stat-label">Sin stock</span>
+    <strong class="stat-value">{{ outOfStockCount() }}</strong>
+  </article>
+</section>
 
 <section class="app-card panel">
   <div class="toolbar">
@@ -17,8 +38,10 @@
   </div>
 
   <div *ngIf="loading" class="empty-state">
-    <h3 class="empty-state-title">Cargando productos...</h3>
-    <p class="empty-state-text">Espera un momento mientras consultamos tu inventario.</p>
+    <h3 class="empty-state-title">Cargando inventario...</h3>
+    <p class="empty-state-text">
+      Espera un momento mientras consultamos stock, precios y disponibilidad.
+    </p>
   </div>
 
   <ng-container *ngIf="!loading">
@@ -59,9 +82,9 @@
 
     <ng-template #noProducts>
       <div class="empty-state">
-        <h3 class="empty-state-title">No hay productos</h3>
+        <h3 class="empty-state-title">No hay productos registrados</h3>
         <p class="empty-state-text">
-          Cuando cargues productos en tu backend, aparecerán aquí.
+          Cuando registres productos en tu backend, aparecerán aquí con su stock actual.
         </p>
       </div>
     </ng-template>

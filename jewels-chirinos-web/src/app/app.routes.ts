@@ -15,9 +15,10 @@ export const routes: Routes = [
     component: ShellComponent,
     canActivate: [authGuard],
     children: [
-  { path: 'dashboard', component: DashboardPageComponent },
-   { path: 'products', component: ProductsPage },
-      { path: 'customers', component: CustomersPage},
+      { path: 'dashboard', component: DashboardPageComponent },
+      { path: 'inventory', component: ProductsPage },
+      { path: 'products', pathMatch: 'full', redirectTo: 'inventory' },
+      { path: 'customers', component: CustomersPage },
       { path: 'sales', component: SalesPage },
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
     ]
